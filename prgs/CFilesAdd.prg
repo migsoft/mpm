@@ -1,5 +1,5 @@
 /*
- * $Id: CFilesAdd.prg,v 1.1 2013/11/18 20:40:24 migsoft Exp $
+ * $Id: CFilesAdd.prg
  */
 
 #include "oohg.ch"
@@ -7,7 +7,7 @@
 Procedure AddCfiles
 *---------------------------------------------------------------------*
    Local Files , x , i , Exists
-   
+
    DECLARE WINDOW main
    DECLARE WINDOW MigMess
 
@@ -48,7 +48,7 @@ Function GetCFiles()
      Aeval( aFiles,{|x,y| aFiles[y] :=cDirNew + "\" + x[1]} )
 
      If Len(aFiles)>0
-     
+
         aFiles :=ASORT(aFiles,{|x,y| UPPER(x) < UPPER(y)})
 
         DEFINE WINDOW GetCFiles AT 0,0 WIDTH 533 HEIGHT 384 TITLE 'Select C Files' ;
@@ -134,10 +134,9 @@ Function GetCFilesOk( aFiles , aSelected )
       aNew := aFiles
    Else
       For i := 1 To Len ( aSelected )
-          DO EVENTS      
+          DO EVENTS
           aadd ( aNew , aFiles [ aSelected [i] ] )
       Next i
    Endif
 
 Return aNew
-

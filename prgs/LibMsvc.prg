@@ -1,5 +1,5 @@
 /*
- * $Id: LibMsvc.prg,v 1.1 2013/11/18 20:40:25 migsoft Exp $
+ * $Id: LibMsvc.prg
  */
 
 #include "oohg.ch"
@@ -137,7 +137,7 @@ Procedure BuildLib5( ProjectName )  // Library Visual C
                    MakeName + ' ' + ParamString + NewLi + 'Echo End > ' + PROJECTFOLDER + If ( Right ( PROJECTFOLDER , 1 ) != '\' , '\' , '' ) + 'End.Txt' + NewLi )
 
 //                  '@ECHO OFF' + NewLi + 'call "%ProgramFiles%\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x86' + NewLi + ;
-                   
+
         Procesando(1)
         Processing := .t.
 
@@ -158,5 +158,3 @@ Procedure BuildLib5( ProjectName )  // Library Visual C
     Procesando(2)
 
 Return
-
-

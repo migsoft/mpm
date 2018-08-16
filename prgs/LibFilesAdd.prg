@@ -1,5 +1,5 @@
 /*
- * $Id: LibFilesAdd.prg,v 1.1 2013/11/18 20:40:25 migsoft Exp $
+ * $Id: LibFilesAdd.prg
  */
 
 #include "oohg.ch"
@@ -51,7 +51,7 @@ Function GetLibFiles()
         aFiles :=DIRECTORY(cDirNew + "\" +"*.Lib")
         AEVAL(aFiles,{|x,y| aFiles[y] :=cDirNew + "\" + x[1]})
      Endif
-   
+
      If Len(aFiles) > 0
 
         aFiles :=ASORT(aFiles,{|x,y| UPPER(x) < UPPER(y)})
@@ -106,7 +106,7 @@ Function GetLibFiles()
             CAPTION "Cancel"
             ONCLICK  ( RetVal := {} , GetLibFiles.Release )
          END BUTTON
-         
+
          DEFINE LABEL Label_1
             ROW    315
             COL    40
@@ -139,7 +139,7 @@ Function GetLibFilesOk( aFiles , aSelected )
       aNew := aFiles
    Else
       For i := 1 To Len ( aSelected )
-          DO EVENTS      
+          DO EVENTS
           aadd ( aNew , aFiles [ aSelected [i] ] )
       Next i
    Endif

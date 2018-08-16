@@ -1,5 +1,5 @@
 /*
- * $Id: ExeCommon.prg,v 1.2 2014/07/11 19:38:40 migsoft Exp $
+ * $Id: ExeCommon.prg
  */
 
 #include "oohg.ch"

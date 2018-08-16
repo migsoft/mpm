@@ -1,5 +1,5 @@
 /*
- * $Id: AboutWin.prg,v 1.1 2013/11/18 20:40:24 migsoft Exp $
+ * $Id: AboutWin.prg
  */
 
 #include "oohg.ch"
@@ -122,7 +122,7 @@ Procedure About()
             BACKCOLOR {255,255,255}
             VALUE Hb_Compiler()
      END TEXTBOX
-     
+
      ON KEY ESCAPE ACTION mAbout.Release
      ON KEY F1     ACTION mAbout.Release
 

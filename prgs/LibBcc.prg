@@ -1,5 +1,5 @@
 /*
- * $Id: LibBcc.prg,v 1.1 2013/11/18 20:40:25 migsoft Exp $
+ * $Id: LibBcc.prg
  */
 
 #include "oohg.ch"
@@ -68,7 +68,7 @@ Procedure BuildLib( ProjectName )  // Borland C
         Endif
 
         Out := Out + '$(APP_NAME) :	$(OBJ_DIR)\' + GetName(Left ( PRGFILES [1] , Len(PRGFILES [1] ) - 4 )) + '.obj'+ cBarra + NewLi
-        
+
        nTotFmgs := 0
 
         For i := 2 TO Len ( PrgFiles )
@@ -76,7 +76,7 @@ Procedure BuildLib( ProjectName )  // Borland C
             If upper(Right( PRGFILES [i] , 3 )) = 'FMG'
                 nTotFmgs := nTotFmgs + 1
             Endif
-        Next           
+        Next
 
         For i := 2 TO Len ( PrgFiles )
             DO EVENTS
@@ -153,7 +153,7 @@ Procedure BuildLib( ProjectName )  // Borland C
 
     END SEQUENCE
 
-    QuitarEspera()      
+    QuitarEspera()
 
     main.Tab_1.value := 7
 

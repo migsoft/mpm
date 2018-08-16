@@ -1,5 +1,5 @@
 /*
- * $Id: LibPocc.prg,v 1.1 2013/11/18 20:40:25 migsoft Exp $
+ * $Id: LibPocc.prg
  */
 
 #include "oohg.ch"
@@ -35,7 +35,7 @@ Procedure BuildLib4( ProjectName )  // Library Pelles C
         cHarbourFolder := HARBOURFOLDER
         cLibFolder     := iif( empty(LIBFOLDER),'',LIBFOLDER )
         cUserFlags     := iif( empty(USERFLAGS),'',USERFLAGS )
-   
+
         EXEOUTPUTNAME := iif( empty(EXEOUTPUTNAME), GetName( Left( PRGFILES [1] , Len(PRGFILES [1] ) - 4 ) ) + '.lib' , EXEOUTPUTNAME+ '.lib' )
 
         Out := Out + 'HARBOUR_EXE = '   + cHarbourFolder + '\BIN\HARBOUR.EXE'   + NewLi
@@ -68,7 +68,7 @@ Procedure BuildLib4( ProjectName )  // Library Pelles C
         Endif
 
         Out += '$(APP_NAME) : $(OBJ_DIR)\' + GetName(Left ( PRGFILES [1] , Len( PRGFILES [1] ) - 4 ))  + '.obj'+ cBarra + NewLi
-   
+
         nTotFmgs := 0
 
         For i := 2 TO Len ( PrgFiles )
@@ -150,7 +150,7 @@ Procedure BuildLib4( ProjectName )  // Library Pelles C
         CorreBuildBat()
 
     END SEQUENCE
-      
+
     QuitarEspera()
 
     main.Tab_1.value := 7

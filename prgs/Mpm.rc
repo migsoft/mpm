@@ -1,5 +1,5 @@
 //
-// $Id: Mpm.rc,v 1.1 2013/11/18 20:40:23 migsoft Exp $
+// $Id: Mpm.rc
 //
 
 ampm        ICON     ..\res\Migproj.ico
@@ -47,7 +47,7 @@ BEGIN
     BEGIN
         BLOCK "280a04b0"
         BEGIN
-            VALUE "CompanyName", "Miguel Angel Juárez Apaza"
+            VALUE "CompanyName", "Miguel Angel Juï¿½rez Apaza"
             VALUE "FileDescription", "MigSoft Project Manager"
             VALUE "FileVersion", "1, 0, 0, 0"
             VALUE "InternalName", " MPM "

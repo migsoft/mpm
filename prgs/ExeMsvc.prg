@@ -1,5 +1,5 @@
 /*
- * $Id: ExeMsvc.prg,v 1.1 2013/11/18 20:40:24 migsoft Exp $
+ * $Id: ExeMsvc.prg
  */
 
 #include "oohg.ch"
@@ -170,13 +170,13 @@ Procedure Build5(ProjectName) //(x)Harbour - Visual C
        Out += HbLibs(cHARBOURFOLDER,1,4)
     Else
        Out += HbLibs(cHARBOURFOLDER,2,4)
-    Endif  
-    
+    Endif
+
       For i := 1 To Len ( LIBFILES )
           DO EVENTS
           Out += '	echo ' + Left ( LIBFILES [i] , Len(LIBFILES [i] ) - 4 ) + '.lib >> b32.bc' + NewLi
       Next i
-      
+
     Out += '	echo user32.lib >> b32.bc' + NewLi
     Out += '	echo ws2_32.lib >> b32.bc' + NewLi
     Out += '	echo winspool.lib >> b32.bc' + NewLi
@@ -191,7 +191,7 @@ Procedure Build5(ProjectName) //(x)Harbour - Visual C
     Out += '	echo comctl32.lib >> b32.bc' + NewLi
     Out += '	echo comdlg32.lib >> b32.bc' + NewLi
     Out += '	echo wsock32.lib >> b32.bc' + NewLi
-   
+
     If WATHGUI = 4
        Out += '	echo _temp.res >> b32.bc' + NewLi
     Else
@@ -229,11 +229,11 @@ Procedure Build5(ProjectName) //(x)Harbour - Visual C
     ParamString := '/F ' + PROJECTFOLDER + If ( Right ( PROJECTFOLDER , 1 ) != '\' , '\' , '' ) +  '_Temp.bc' + ' 1>' + PROJECTFOLDER + If ( Right ( PROJECTFOLDER , 1 ) != '\' , '\' , '' ) +  '_Temp.Log 2>&1'
 
     Hb_Memowrit ( PROJECTFOLDER + If ( Right ( PROJECTFOLDER , 1 ) != '\' , '\' , '' ) + '_Build.Bat' , ;
-                  '@ECHO OFF' + NewLi + 'call '+AddQuote( BCCFOLDER +'\vcvarsall.bat')+' x86' + NewLi + ;    
+                  '@ECHO OFF' + NewLi + 'call '+AddQuote( BCCFOLDER +'\vcvarsall.bat')+' x86' + NewLi + ;
                        MakeName + ' ' + ParamString + NewLi + 'Echo End > ' + PROJECTFOLDER + If ( Right ( PROJECTFOLDER , 1 ) != '\' , '\' , '' ) + 'End.Txt' + NewLi )
 
-                  // '@ECHO OFF' + NewLi + 'call "%ProgramFiles%\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x86' + NewLi + ;                       
-                       
+                  // '@ECHO OFF' + NewLi + 'call "%ProgramFiles%\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x86' + NewLi + ;
+
       Procesando(1)
       Processing := .T.
 
@@ -244,7 +244,7 @@ Procedure Build5(ProjectName) //(x)Harbour - Visual C
       END SEQUENCE
 
       QuitarEspera()
-      
+
       EndBuild()
 
       Procesando(2)

@@ -1,5 +1,5 @@
 /*
- * $Id: LibGcc.prg,v 1.1 2013/11/18 20:40:25 migsoft Exp $
+ * $Id: LibGcc.prg
  */
 
 #include "oohg.ch"
@@ -63,7 +63,7 @@ Procedure Build2Lib( ProjectName )  // Library MinGW
         Endif
 
         Out := Out + '$(APP_NAME):'
-        
+
         nTotFmgs := 0
 
         For i := 2 TO Len ( PrgFiles )
@@ -71,7 +71,7 @@ Procedure Build2Lib( ProjectName )  // Library MinGW
             If upper(Right( PRGFILES [i] , 3 )) = 'FMG'
                 nTotFmgs := nTotFmgs + 1
             Endif
-        Next              
+        Next
 
         For n := 1 TO Len(PrgFiles)
             DO EVENTS
@@ -149,7 +149,7 @@ Procedure Build2Lib( ProjectName )  // Library MinGW
         main.RichEdit_1.Value := ''
 
         CorreBuildBat()
-   
+
     END SEQUENCE
 
     QuitarEspera()

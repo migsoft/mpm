@@ -1,5 +1,5 @@
 /*
- * $Id: PrgFilesAdd.prg,v 1.1 2013/11/18 20:40:25 migsoft Exp $
+ * $Id: PrgFilesAdd
  */
 
 #include "oohg.ch"
@@ -137,7 +137,7 @@ Function GetPrgFilesOk( aFiles , aSelected )
       aNew := aFiles
    Else
       For i := 1 To Len ( aSelected )
-          DO EVENTS      
+          DO EVENTS
           aadd ( aNew , aFiles [ aSelected [i] ] )
       Next i
    Endif

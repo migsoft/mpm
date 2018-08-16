@@ -1,5 +1,5 @@
 /*
- * $Id: ExePocc.prg,v 1.1 2013/11/18 20:40:25 migsoft Exp $
+ * $Id: ExePocc.prg
  */
 
 #include "oohg.ch"
@@ -70,7 +70,7 @@ Procedure Build4(ProjectName) //(x)Harbour - Pelles C
     ELSE
        Out += 'HARBOUR_FLAGS = /i$(INCLUDE_DIR) /n '+RetHbLevel()+' $(USER_FLAGS)' + NewLi
     ENDIF
-    
+
 
     cFlags := iif(empty(USERCFLAGS),' /Ze /Zx /Go /Tx86-coff /D__WIN32__ ', USERCFLAGS)
 
@@ -164,7 +164,7 @@ Procedure Build4(ProjectName) //(x)Harbour - Pelles C
     Else
        Out += HbLibs(HARBOURFOLDER,2,3)
     Endif
-    
+
       For i := 1 To Len ( LIBFILES )
           DO EVENTS
           Out += '	echo ' + Left ( LIBFILES [i] , Len(LIBFILES [i] ) - 4 ) + '.lib >> b32.bc' + NewLi
@@ -228,13 +228,13 @@ Procedure Build4(ProjectName) //(x)Harbour - Pelles C
       Processing := .T.
 
       main.RichEdit_1.Value := ''
-      
+
       CorreBuildBat()
 
       END SEQUENCE
 
       QuitarEspera()
-      
+
       EndBuild()
 
       Procesando(2)
