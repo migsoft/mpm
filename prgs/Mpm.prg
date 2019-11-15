@@ -12,7 +12,7 @@
 /*
  * ooHG - Object Oriented Harbour GUI library
  * https://oohg.github.io/ - https://migsoft.ml
- * "Mpm.prg" MigSoft Project Manager - Miguel Angel Juárez Apaza
+ * "Mpm.prg" MigSoft Project Manager - Miguel Angel JuÃ¡rez Apaza
  * Copyright 2008-2019 MigSoft <migsoft/at/oohg.org>
  */
 
@@ -301,7 +301,7 @@ Procedure SetTop
 Return
 
 *---------------------------------------------------------------------*
-Procedure OpenMPM2( ProjectFile ) // Versión antigüa de .mpm
+Procedure OpenMPM2( ProjectFile ) // VersiÃ³n antigÃ¼a de .mpm
 *---------------------------------------------------------------------*
 
    Local ConfigFile , ConfigFileName , i , Line
@@ -465,7 +465,7 @@ Procedure ChangeDrvSource(cLine)
    Endif
 Return(cLine)
 *---------------------------------------------------------------------*
-Procedure OpenMPM( ProjectFile ) // Versión nueva de .mpm
+Procedure OpenMPM( ProjectFile ) // VersiÃ³n nueva de .mpm
 *---------------------------------------------------------------------*
 
    Local cDiskNew := Upper(Hb_CurDrive()) + ":\", c := ''
@@ -1012,7 +1012,7 @@ Procedure BuildMode(nModo,nCChoice,nHChoice)
 
     // nHChoice = RadioGroup_5 - Harbour - xharbour
     // nCChoice = RadioGroup_6 - MingW - BCC - Pelles - Visual
-    // nModo    = RadioGroup_7 - Exe - Librería
+    // nModo    = RadioGroup_7 - Exe - LibrerÃ­a
 
     Aadd( cPrgFile , Alltrim(main.List_1.Item(1)) )
 
@@ -1058,7 +1058,7 @@ Procedure BuildMode(nModo,nCChoice,nHChoice)
                Case nCChoice == 4 .and. nHChoice = 2 //xHarbour - Visual C
                     Build5( ProjectName )
             Endcase
-       Case nModo == 2  // Librería
+       Case nModo == 2  // LibrerÃ­a
             Do Case
                Case nCChoice == 1  //MinGW
                     //BuildAny( ProjectName )
