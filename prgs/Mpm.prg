@@ -11,9 +11,9 @@
 
 /*
  * ooHG - Object Oriented Harbour GUI library
- * https://oohg.github.io/ - https://alturademiras.com
+ * https://oohg.github.io/ - https://migsoft.ml
  * "Mpm.prg" MigSoft Project Manager - Miguel Angel Juárez Apaza
- * Copyright 2008-2018 MigSoft <migsoft/at/oohg.org> 
+ * Copyright 2008-2019 MigSoft <migsoft/at/oohg.org>
  */
 
 /* Optimizations */
@@ -102,7 +102,7 @@ Procedure Publicar
    Public EXECOMPRESS    := .F.
    Public EXE64BITS      := .F.
    Public DELETEBATCH    := .T.
-   
+
    Public CCFOLDER       := ''
    Public BCCFOLDER      := ''
    Public OBJFOLDER      := ''
@@ -485,7 +485,7 @@ Procedure OpenMPM( ProjectFile ) // Versión nueva de .mpm
 
    If !Empty (ConfigFilename) .and. UPPER(GetExt(ConfigFileName)) = '.MPM'
        ProjectName := ConfigFileName
-       
+
        Main.Title := ' [ ' + AllTrim ( ProjectName ) + ' ]'
 
        Mpm_DiskPaths(ProjectName)
@@ -501,11 +501,11 @@ Procedure OpenMPM( ProjectFile ) // Versión nueva de .mpm
              Endif
 
          GET main.text_2.value       SECTION 'PROJECT'    ENTRY "EXEOUTPUTNAME"
-         
-         GET main.check_1.value      SECTION 'PROJECT'    ENTRY "EXECOMPRESS"         
-         GET main.check_64.value     SECTION 'PROJECT'    ENTRY "EXE64BITS"         
+
+         GET main.check_1.value      SECTION 'PROJECT'    ENTRY "EXECOMPRESS"
+         GET main.check_64.value     SECTION 'PROJECT'    ENTRY "EXE64BITS"
          GET main.check_bat.value    SECTION 'PROJECT'    ENTRY "DELETEBATCH"
-         
+
          GET main.text_5.value       SECTION 'PROJECT'    ENTRY "OBJFOLDER"
              main.text_5.value := ChgPathToReal( main.text_5.value )
          GET main.text_6.value       SECTION 'PROJECT'    ENTRY "LIBFOLDER"
@@ -697,18 +697,9 @@ Return
 *---------------------------------------------------------------------*
 Procedure CorreBuildBat()
 *---------------------------------------------------------------------*
-   Local cOs := UPPER(GETE('os'))
-
-   if len(cos)== 0
-      cOs := GETE('os_type')
-   endif
-
-   If cos == 'WINDOWS_NT'
-      WaitRun( "_Build.Bat",0 )
-   Else
-      EXECUTE FILE PROJECTFOLDER + If ( Right ( PROJECTFOLDER , 1 ) != '\' , '\' , '' ) + '_Build.Bat' WAIT
-   Endif
-
+      EXECUTE FILE PROJECTFOLDER + If ( Right ( PROJECTFOLDER , 1 ) != '\' , '\' , '' ) + '_Build.Bat' Hide
+      main.RichEdit_1.Value := TranslateLog ( MemoRead ( PROJECTFOLDER + '\_Temp.Log' ) )
+      DO EVENTS
 Return
 *---------------------------------------------------------------------*
 Procedure StatusRefresh()
@@ -750,7 +741,7 @@ Procedure BorraTemporales()
          Ferase(oPath +'\'+'Makefile.Gcc')
          Ferase(oPath +'\'+'b32.bc')
          Ferase(oPath +'\'+'p32.bc')
-         Ferase(oPath +'\'+'p32.pc') 
+         Ferase(oPath +'\'+'p32.pc')
       Endif
       Ferase(oPath +'\'+'End.txt')
       Ferase(oPath +'\'+'error.lst')
@@ -875,11 +866,11 @@ Procedure SaveProject()  // Guarda variables en carpeta de mpm
 
          SET SECTION 'PROJECT'    ENTRY "PROJECTFOLDER"   TO main.text_1.value
          SET SECTION 'PROJECT'    ENTRY "EXEOUTPUTNAME"   TO main.text_2.value
-         
-         SET SECTION 'PROJECT'    ENTRY "EXECOMPRESS"     TO main.check_1.value     
-         SET SECTION 'PROJECT'    ENTRY "EXE64BITS"       TO main.check_64.value  
-         SET SECTION 'PROJECT'    ENTRY "DELETEBATCH"     TO main.check_bat.value 
-         
+
+         SET SECTION 'PROJECT'    ENTRY "EXECOMPRESS"     TO main.check_1.value
+         SET SECTION 'PROJECT'    ENTRY "EXE64BITS"       TO main.check_64.value
+         SET SECTION 'PROJECT'    ENTRY "DELETEBATCH"     TO main.check_bat.value
+
          SET SECTION 'PROJECT'    ENTRY "OBJFOLDER"       TO ChgPathToRelative(main.text_5.value)
          SET SECTION 'PROJECT'    ENTRY "LIBFOLDER"       TO ChgPathToRelative(main.text_6.value)
          SET SECTION 'PROJECT'    ENTRY "INCLUDEFOLDER"   TO ChgPathToRelative(main.text_7.value)
@@ -1442,7 +1433,7 @@ Function MyAt(cBusca,cTodo,nInicio)
    local i,nposluna
    nPosluna := 0
    for i := nInicio to len(cTodo)
-       DO EVENTS              
+       DO EVENTS
        if UPPER(SUBSTR(cTodo,i,len(cBusca))) = UPPER(cBusca)
           nPosluna := i
           exit
@@ -1933,8 +1924,8 @@ Function MyOBJName()
       ElseIf main.RadioGroup_6.Value = 4 .and. main.RadioGroup_5.Value = 2
              cOBJName := "vOBJx64"
       Endif
-  Endif    
-      
+  Endif
+
 Return( cOBJName )
 *---------------------------------------------------------------------*
 Procedure ComprimoExe(ProjectFolder,ProjectFile)
