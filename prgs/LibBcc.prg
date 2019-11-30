@@ -30,6 +30,8 @@ Procedure BuildLib( ProjectName )  // Borland C
         MsgBuild()
 
         EXEOUTPUTNAME := iif( empty(EXEOUTPUTNAME), GetName( Left( PRGFILES [1] , Len(PRGFILES [1] ) - 4 ) ) + '.lib' , EXEOUTPUTNAME+ '.lib' )
+        
+        ExeName := EXEOUTPUTNAME
 
         Out := Out + 'HARBOUR_EXE = ' + HARBOURFOLDER + If ( Right ( HARBOURFOLDER , 1 ) != '\' , '\' , '' ) + 'BIN\HARBOUR.EXE'  + NewLi
         Out := Out + 'CC = ' + BCCFOLDER + If ( Right ( BCCFOLDER , 1 ) != '\' , '\' , '' ) + 'BIN\BCC32.EXE'  + NewLi
@@ -145,6 +147,7 @@ Procedure BuildLib( ProjectName )  // Borland C
          'End.Txt' + NewLi )
 
         Procesando(1)
+
         Processing := .t.
 
         main.RichEdit_1.Value := ''
@@ -152,14 +155,6 @@ Procedure BuildLib( ProjectName )  // Borland C
         CorreBuildBat()
 
     END SEQUENCE
-
-    QuitarEspera()
-
-    main.Tab_1.value := 7
-
-    If File(EXEOUTPUTNAME)
-        MsgInfo('Library File: '+ EXEOUTPUTNAME+' is OK',"Project Build")
-    Endif
 
     Procesando(2)
 

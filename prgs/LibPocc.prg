@@ -37,6 +37,8 @@ Procedure BuildLib4( ProjectName )  // Library Pelles C
         cUserFlags     := iif( empty(USERFLAGS),'',USERFLAGS )
 
         EXEOUTPUTNAME := iif( empty(EXEOUTPUTNAME), GetName( Left( PRGFILES [1] , Len(PRGFILES [1] ) - 4 ) ) + '.lib' , EXEOUTPUTNAME+ '.lib' )
+        
+        ExeName := EXEOUTPUTNAME
 
         Out := Out + 'HARBOUR_EXE = '   + cHarbourFolder + '\BIN\HARBOUR.EXE'   + NewLi
         Out := Out + 'CC = '            + cBccFolder     + '\BIN\POCC.EXE'      + NewLi
@@ -143,6 +145,7 @@ Procedure BuildLib4( ProjectName )  // Library Pelles C
          'End.Txt' + NewLi )
 
         Procesando(1)
+        
         Processing := .t.
 
         main.RichEdit_1.Value := ''
@@ -150,14 +153,6 @@ Procedure BuildLib4( ProjectName )  // Library Pelles C
         CorreBuildBat()
 
     END SEQUENCE
-
-    QuitarEspera()
-
-    main.Tab_1.value := 7
-
-    If File(EXEOUTPUTNAME)
-        MsgInfo('Library File: '+ EXEOUTPUTNAME+' is OK',"Project Build")
-    Endif
 
     Procesando(2)
 

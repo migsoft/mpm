@@ -74,7 +74,7 @@ Procedure MsgBuild()
       Endif
 
       If ( main.RadioGroup_7.Value == 1 ) // EXE
-         If File( GetName(ExeName)+'.exe' )
+         If File( GetName( ExeName ) + '.exe' )
             if MsgYesNo('File: '+ GetName(ExeName)+'.exe Already Exist, Rebuild?',"Rebuild Project") == .F.
                BREAK
             Else
@@ -83,8 +83,17 @@ Procedure MsgBuild()
                main.RichEdit_1.Value := ''
             Endif
          Endif
+      Else
+          If ( main.RadioGroup_7.Value == 2 ) // Librarie
+             If File( GetName( ExeName ) + '.a' ) .or. File( GetName( ExeName ) + '.lib' )
+                if MsgYesNo('File: '+ GetName(ExeName)+'.a/.lib Already Exist, Rebuild?',"Rebuild Project") == .F.
+                   BREAK
+                Endif
+             Endif
+          Endif
       Endif
 
+      cStartTime := Time()
       PonerEspera('Compiling...')
 
       For i := 1 To main.List_1.ItemCount
@@ -110,9 +119,14 @@ Procedure EndBuild()
 
       main.Tab_1.value := 7
 
-      If File(PROJECTFOLDER+'\'+GetName(ExeName)+'.exe') .and. TxtSearch('error') == .F.
+      if File ( PROJECTFOLDER + '\End.Txt' )
+         MsgInfo("Endbuild() End.txt")
+      Endif
+
+      If File(PROJECTFOLDER+'\'+GetName(ExeName)+'.exe') .and. TxtSearch('error') == .F. .and. !Processing
          if MsgYesNo('Execute File: ['+ GetName(ExeName)+'.exe] ?',"Project Build") == .T.
             cursorwait2()
+            AutoMsgInfo( main.Check_1.value )
             If main.Check_1.value == .T.
                If MsgYesNo('Compress File: ['+ GetName(ExeName)+'.exe] ?',"Compress Exe with UPX") == .T.
                   PonerEspera('Compress...')
@@ -124,14 +138,11 @@ Procedure EndBuild()
             cursorarrow2()
          Else
             main.RichEdit_1.Value := 'File: [' + GetName(ExeName) + '.exe] is OK'
-            main.Tab_1.value := 7
             main.RichEdit_1.Setfocus
          Endif
-         DELETE FILE ( PROJECTFOLDER + '\_Temp.Log' )
       Else
          main.RichEdit_1.Setfocus
       Endif
-
 Return
 
 

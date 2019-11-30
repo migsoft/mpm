@@ -1,18 +1,57 @@
 /*
- * $Id: main.Fmg,v 1.2 2014/07/11 19:38:40 migsoft Exp $
+ * $Id: main.Fmg,v 2.0 2019/11/27 13:59:38 migsoft Exp $
  */
 
 *HMGS-MINIGUI-IDE Two-Way Form Designer Generated Code
 *OPEN SOURCE PROJECT 2005-2011 Walter Formigoni http://sourceforge.net/projects/hmgs-minigui/
 
-DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Project Manager" ICON "AMPM" MAIN NOMAXIMIZE NOSIZE ON RELEASE SAVEENVIRONMENT() ON INTERACTIVECLOSE EXITPROG() BACKCOLOR {255,255,255}
+DEFINE WINDOW TEMPLATE AT 0 , 0 WIDTH GetDeskTopWidth() HEIGHT GetDeskTopHeight()-23-20 TITLE "(c) MigSoft Project Manager" ICON "AMPM" MAIN ON RELEASE SAVEENVIRONMENT() ON INTERACTIVECLOSE EXITPROG() BACKCOLOR {255,255,255}
 
-     DEFINE STATUSBAR FONT "Calibri" SIZE 9
-            STATUSITEM ""
-            STATUSITEM "Status: Idle ..." WIDTH 140 ICON "Build"
-     END STATUSBAR
+     DEFINE MAIN MENU
+          DEFINE POPUP "File"
+               MENUITEM "New"          ACTION New()
+               MENUITEM "Open"         ACTION OpenMPM()
+               MENUITEM "Save"         ACTION Save()
+               SEPARATOR
+               MENUITEM "Exit"         ACTION ExitProg()
+          END POPUP
+          DEFINE POPUP "Project"
+               MENUITEM "Build"        ACTION BuildMode(main.radiogroup_7.value,main.radiogroup_6.value,main.radiogroup_5.value)
+               MENUITEM "Run"          ACTION Run()
+          END POPUP
+          DEFINE POPUP "Tools"
+               MENUITEM "Text Editor"  ACTION OpcTools( 1 )
+               MENUITEM "Form Editor"  ACTION OpcTools( 2 )
+               MENUITEM "EXE Compress" ACTION OpcTools( 3 )
+          END POPUP
+          DEFINE POPUP "Help"
+               MENUITEM "Help"         ACTION NIL
+               MENUITEM "About"        ACTION About()
+          END POPUP
+     END MENU
 
-  DEFINE TAB Tab_1 AT 0,0 WIDTH 520 HEIGHT 320 VALUE 1 FONT "Segoe UI" SIZE 9 TOOLTIP "" FLAT  ON CHANGE FocoEnText()
+
+  DEFINE STATUSBAR FONT "Calibri" SIZE 9
+         STATUSITEM ""
+         STATUSITEM "Status: Idle ..." WIDTH 140 ICON "Build"
+  END STATUSBAR
+
+
+  DEFINE SPLITBOX
+
+      DEFINE TOOLBAR ToolBar_1 BUTTONSIZE 16,16 FONT "Arial" SIZE 9 FLAT
+        BUTTON New1      TOOLTIP "New Project"          PICTURE "mnew"       ACTION New()
+        BUTTON Open1     TOOLTIP "Open Project"         PICTURE "mopen"      ACTION OpenMPM()
+        BUTTON Save1     TOOLTIP "Save"                 PICTURE "msave"      ACTION Save()
+        BUTTON Build1    TOOLTIP "Build"                PICTURE "mbuild"     ACTION BuildMode(main.radiogroup_7.value,main.radiogroup_6.value,main.radiogroup_5.value)
+        BUTTON Run1      TOOLTIP "Run"                  PICTURE "mrun"       ACTION Run()              SEPARATOR
+        BUTTON Exit1     TOOLTIP "Exit"                 PICTURE "mexit"      ACTION ExitProg()
+      END TOOLBAR
+
+  END SPLITBOX
+
+
+  DEFINE TAB Tab_1 AT 32,0 WIDTH Main.Width HEIGHT Main.Height - 280  VALUE 1 FONT "Segoe UI" SIZE 9 TOOLTIP "" FLAT  ON CHANGE FocoEnText()
 
     PAGE 'Project' IMAGE 'tproject'
 
@@ -37,15 +76,6 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
               PICTURE "mfolder"
         END BUTTON
 
-        DEFINE FRAME Frame_1
-               ROW    170
-               COL    5
-               WIDTH  510
-               HEIGHT 140
-               FONTBOLD .T.
-               OPAQUE .T.
-        END FRAME  
-
         DEFINE TEXTBOX Text_2
                ROW    90
                COL    170
@@ -56,16 +86,7 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                ONGOTFOCUS This.BackColor := {211,237,250}
                ONLOSTFOCUS This.BackColor := {255,255,225}
                BACKCOLOR {255,255,225}
-        END TEXTBOX 
-
-        DEFINE FRAME Frame_5
-               ROW    30
-               COL    5
-               WIDTH  510
-               HEIGHT 140
-               FONTBOLD .T.
-               OPAQUE .T.
-        END FRAME  
+        END TEXTBOX
 
         DEFINE TEXTBOX Text_5
                ROW    190
@@ -88,7 +109,7 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                ONLOSTFOCUS This.BackColor := {255,255,225}
                MAXLENGTH 255
                BACKCOLOR {255,255,225}
-        END TEXTBOX 
+        END TEXTBOX
 
         DEFINE TEXTBOX Text_7
                ROW    270
@@ -100,7 +121,7 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                ONLOSTFOCUS This.BackColor := {255,255,225}
                MAXLENGTH 255
                BACKCOLOR {255,255,225}
-        END TEXTBOX 
+        END TEXTBOX
 
         DEFINE BUTTON Button_3
                ROW    230
@@ -119,22 +140,6 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                ACTION If ( !Empty( Folder := GetFolder() ) , main.text_7.Value := Folder , )
               PICTURE "mfolder"
         END BUTTON
-
-        DEFINE FRAME Frame_4
-               ROW    30
-               COL    5
-               WIDTH  510
-               HEIGHT 140
-               OPAQUE .T.
-        END FRAME
-
-        DEFINE FRAME Frame_8
-               ROW    170
-               COL    5
-               WIDTH  510
-               HEIGHT 140
-               OPAQUE .T.
-        END FRAME
 
         DEFINE LABEL Label_1
                ROW    50
@@ -206,7 +211,7 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                COL    315
                WIDTH  100
                HEIGHT 24
-               VALUE "Batch"
+               VALUE "Del Batch"
                FONTBOLD .T.
                TRANSPARENT .T.
                RIGHTALIGN .T.
@@ -262,15 +267,15 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
 
     PAGE 'Files' IMAGE 'tfiles'
 
-        DEFINE TAB Tab_2 AT 30,5 WIDTH 510 HEIGHT 255 VALUE 1 FONT "Segoe UI" SIZE 9 FLAT
+        DEFINE TAB Tab_2 AT 25,0 WIDTH Main.Width HEIGHT Main.Tab_1.Height - 25 VALUE 1 FONT "Segoe UI" SIZE 9 FLAT
 
           PAGE '[*.PRG/*.C] Source Files' IMAGE 'mprg'
 
             DEFINE LISTBOX List_1
                ROW    30
-               COL    5
-               WIDTH  500
-               HEIGHT 220
+               COL    10
+               WIDTH  Main.Width - 35
+               HEIGHT Main.Tab_2.Height - 40
                ITEMS {}
                FONTNAME "Segoe UI"
                ONGOTFOCUS This.BackColor := {211,237,250}
@@ -279,6 +284,10 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                ONDBLCLICK EditProgram()
                MULTISELECT .T.
             END LISTBOX
+
+            oLst1 := GetControlObject("List_1","main")
+            oLst1:Anchor := "TOPLEFTBOTTOMRIGHT"
+
 
           END PAGE
 
@@ -286,9 +295,9 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
 
             DEFINE LISTBOX List_3
                ROW    30
-               COL    5
-               WIDTH  500
-               HEIGHT 220
+               COL    10
+               WIDTH  Main.Width - 35
+               HEIGHT Main.Tab_2.Height - 40
                ITEMS {}
                FONTNAME "Segoe UI"
                ONGOTFOCUS This.BackColor := {211,237,250}
@@ -297,6 +306,9 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                ONDBLCLICK EditProgram()
                MULTISELECT .T.
             END LISTBOX
+
+            oLst3 := GetControlObject("List_3","main")
+            oLst3:Anchor := "TOPLEFTBOTTOMRIGHT"
 
           END PAGE
 
@@ -304,9 +316,9 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
 
             DEFINE LISTBOX List_4
                ROW    30
-               COL    5
-               WIDTH  500
-               HEIGHT 220
+               COL    10
+               WIDTH  Main.Width - 35
+               HEIGHT Main.Tab_2.Height - 40
                ITEMS {}
                FONTNAME "Segoe UI"
                ONGOTFOCUS This.BackColor := {211,237,250}
@@ -316,12 +328,16 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                MULTISELECT .T.
             END LISTBOX
 
+            oLst4 := GetControlObject("List_4","main")
+            oLst4:Anchor := "TOPLEFTBOTTOMRIGHT"
+
+
           END PAGE
 
         END TAB
 
         DEFINE BUTTON Button_5
-               ROW    288
+               ROW    Main.Tab_1.Height + 5
                COL    10
                WIDTH  70
                HEIGHT 28
@@ -330,8 +346,11 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
               PICTURE "madd"
         END BUTTON
 
+        oBtn5 := GetControlObject("Button_5","main")
+        oBtn5:Anchor := "LEFTBOTTOM"
+
         DEFINE BUTTON Button_6
-               ROW    288
+               ROW    Main.Tab_1.Height + 5
                COL    80
                WIDTH  70
                HEIGHT 28
@@ -340,9 +359,11 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
               PICTURE "madd"
         END BUTTON
 
+        oBtn6 := GetControlObject("Button_6","main")
+        oBtn6:Anchor := "LEFTBOTTOM"
 
         DEFINE BUTTON Button_22
-               ROW    288
+               ROW    Main.Tab_1.Height + 5
                COL    150
                WIDTH  70
                HEIGHT 28
@@ -351,8 +372,11 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
               PICTURE "madd"
         END BUTTON
 
+        oBtn22 := GetControlObject("Button_22","main")
+        oBtn22:Anchor := "LEFTBOTTOM"
+
         DEFINE BUTTON Button_23
-               ROW    288
+               ROW    Main.Tab_1.Height + 5
                COL    220
                WIDTH  70
                HEIGHT 28
@@ -361,8 +385,11 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
               PICTURE "madd"
         END BUTTON
 
+        oBtn23 := GetControlObject("Button_23","main")
+        oBtn23:Anchor := "LEFTBOTTOM"
+
         DEFINE BUTTON Button_7
-               ROW    288
+               ROW    Main.Tab_1.Height + 5
                COL    290
                WIDTH  70
                HEIGHT 28
@@ -371,8 +398,11 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
               PICTURE "medit"
         END BUTTON
 
+        oBtn7 := GetControlObject("Button_7","main")
+        oBtn7:Anchor := "LEFTBOTTOM"
+
         DEFINE BUTTON Button_8
-               ROW    288
+               ROW    Main.Tab_1.Height + 5
                COL    360
                WIDTH  70
                HEIGHT 28
@@ -381,8 +411,11 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
               PICTURE "mup"
         END BUTTON
 
+        oBtn8 := GetControlObject("Button_8","main")
+        oBtn8:Anchor := "LEFTBOTTOM"
+
         DEFINE BUTTON Button_11
-               ROW    288
+               ROW    Main.Tab_1.Height + 5
                COL    430
                WIDTH  80
                HEIGHT 28
@@ -390,6 +423,9 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                CAPTION "Erase"
               PICTURE "mremove"
         END BUTTON
+
+        oBtn11 := GetControlObject("Button_11","main")
+        oBtn11:Anchor := "LEFTBOTTOM"
 
     END PAGE
 
@@ -400,7 +436,7 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                COL    15
                WIDTH  120
                HEIGHT 24
-               VALUE "MinGW"
+               VALUE "Harbour MinGW"
                FONTNAME "Segoe UI"
                FONTBOLD .T.
                TRANSPARENT .T.
@@ -412,12 +448,12 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                COL    15
                WIDTH  120
                HEIGHT 24
-               VALUE "(x)Harbour"
+               VALUE "Flags (x)Harbour"
                FONTNAME "Segoe UI"
                FONTBOLD .T.
                TRANSPARENT .T.
                RIGHTALIGN .T.
-        END LABEL  
+        END LABEL
 
         DEFINE TEXTBOX Text_24
                ROW    190
@@ -426,8 +462,9 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                HEIGHT 24
                ONGOTFOCUS This.BackColor := {211,237,250}
                ONLOSTFOCUS This.BackColor := {255,255,225}
+               TOOLTIP "Harbour/MinGW Flags"
                BACKCOLOR {255,255,225}
-        END TEXTBOX 
+        END TEXTBOX
 
         DEFINE TEXTBOX Text_44
                ROW    190
@@ -436,6 +473,7 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                HEIGHT 24
                ONGOTFOCUS This.BackColor := {211,237,250}
                ONLOSTFOCUS This.BackColor := {255,255,225}
+               TOOLTIP "Harbour/Borland C Flags"
                BACKCOLOR {255,255,225}
         END TEXTBOX
 
@@ -446,8 +484,9 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                HEIGHT 24
                ONGOTFOCUS This.BackColor := {211,237,250}
                ONLOSTFOCUS This.BackColor := {255,255,225}
+               TOOLTIP "Harbour/Pelles C Flags"
                BACKCOLOR {255,255,225}
-        END TEXTBOX 
+        END TEXTBOX
 
         DEFINE TEXTBOX Text_64
                ROW    190
@@ -456,6 +495,7 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                HEIGHT 24
                ONGOTFOCUS This.BackColor := {211,237,250}
                ONLOSTFOCUS This.BackColor := {255,255,225}
+               TOOLTIP "Harbour/Visual C Flags"
                BACKCOLOR {255,255,225}
         END TEXTBOX
 
@@ -469,7 +509,7 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                FONTBOLD .T.
                TRANSPARENT .T.
                RIGHTALIGN .T.
-        END LABEL  
+        END LABEL
 
         DEFINE RADIOGROUP RadioGroup_1
                ROW    220
@@ -480,7 +520,7 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                VALUE 1
                FONTNAME "Segoe UI"
                HORIZONTAL .T.
-        END RADIOGROUP  
+        END RADIOGROUP
 
         DEFINE RADIOGROUP RadioGroup_21
                ROW    220
@@ -491,7 +531,7 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                VALUE 1
                FONTNAME "Segoe UI"
                HORIZONTAL .T.
-        END RADIOGROUP  
+        END RADIOGROUP
 
         DEFINE RADIOGROUP RadioGroup_31
                ROW    220
@@ -513,7 +553,7 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                VALUE 1
                FONTNAME "Segoe UI"
                HORIZONTAL .T.
-        END RADIOGROUP  
+        END RADIOGROUP
 
         DEFINE TEXTBOX Text_8
                ROW    50
@@ -522,8 +562,9 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                HEIGHT 24
                ONGOTFOCUS This.BackColor := {211,237,250}
                ONLOSTFOCUS This.BackColor := {255,255,225}
+               TOOLTIP "Harbour/MinGW Path"
                BACKCOLOR {255,255,225}
-        END TEXTBOX 
+        END TEXTBOX
 
         DEFINE TEXTBOX Text_20
                ROW    50
@@ -531,9 +572,10 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                WIDTH  300
                HEIGHT 24
                ONGOTFOCUS This.BackColor := {211,237,250}
-               ONLOSTFOCUS This.BackColor := {255,255,225}
+               ONLOSTFOCUS This.BackColor := {255,255,225}               
+               TOOLTIP "Harbour/Borland C Path"
                BACKCOLOR {255,255,225}
-        END TEXTBOX 
+        END TEXTBOX
 
         DEFINE BUTTON Button_12
                ROW    50
@@ -551,7 +593,7 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                HEIGHT 28
                ACTION If ( !Empty( Folder := GetFolder() ) , main.text_20.Value := Folder , )
               PICTURE "mfolder"
-        END BUTTON  
+        END BUTTON
 
         DEFINE TEXTBOX Text_9
                ROW    50
@@ -560,8 +602,9 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                HEIGHT 24
                ONGOTFOCUS This.BackColor := {211,237,250}
                ONLOSTFOCUS This.BackColor := {255,255,225}
+               TOOLTIP "Harbour/Pelles C Path"
                BACKCOLOR {255,255,225}
-        END TEXTBOX 
+        END TEXTBOX
 
         DEFINE TEXTBOX Text_3
                ROW    50
@@ -570,8 +613,9 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                HEIGHT 24
                ONGOTFOCUS This.BackColor := {211,237,250}
                ONLOSTFOCUS This.BackColor := {255,255,225}
+               TOOLTIP "xHarbour/MinGW Path"               
                BACKCOLOR {255,255,225}
-        END TEXTBOX 
+        END TEXTBOX
 
         DEFINE TEXTBOX Text_4
                ROW    50
@@ -580,8 +624,9 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                HEIGHT 24
                ONGOTFOCUS This.BackColor := {211,237,250}
                ONLOSTFOCUS This.BackColor := {255,255,225}
+               TOOLTIP "xHarbour/Borland C Path"
                BACKCOLOR {255,255,225}
-        END TEXTBOX 
+        END TEXTBOX
 
         DEFINE TEXTBOX Text_10
                ROW    50
@@ -590,8 +635,9 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                HEIGHT 24
                ONGOTFOCUS This.BackColor := {211,237,250}
                ONLOSTFOCUS This.BackColor := {255,255,225}
+               TOOLTIP "xHarbour/Pelles C Path"               
                BACKCOLOR {255,255,225}
-        END TEXTBOX 
+        END TEXTBOX
 
         DEFINE BUTTON Button_24
                ROW    50
@@ -600,7 +646,7 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                HEIGHT 28
                ACTION If ( !Empty( Folder := GetFolder() ) , main.text_9.Value := Folder , )
               PICTURE "mfolder"
-        END BUTTON  
+        END BUTTON
 
         DEFINE BUTTON Button_25
                ROW    50
@@ -609,7 +655,7 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                HEIGHT 28
                ACTION If ( !Empty( Folder := GetFolder() ) , main.text_3.Value := Folder , )
               PICTURE "mfolder"
-        END BUTTON  
+        END BUTTON
 
         DEFINE BUTTON Button_26
                ROW    50
@@ -627,77 +673,50 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                HEIGHT 28
                ACTION If ( !Empty( Folder := GetFolder() ) , main.text_10.Value := Folder , )
               PICTURE "mfolder"
-        END BUTTON  
-
-        DEFINE FRAME Frame_2
-               ROW    30
-               COL    5
-               WIDTH  510
-               HEIGHT 140
-               CAPTION "Harbour"
-               TRANSPARENT .T.
-        END FRAME  
-
-        DEFINE FRAME Frame_3
-               ROW    30
-               COL    5
-               WIDTH  510
-               HEIGHT 140
-               CAPTION "xHarbour"
-               OPAQUE .T.
-        END FRAME  
-
-        DEFINE FRAME Frame_37
-               ROW    170
-               COL    5
-               WIDTH  510
-               HEIGHT 140
-               CAPTION "User Flags"
-               OPAQUE .T.
-        END FRAME  
+        END BUTTON
 
         DEFINE LABEL Label_10
                ROW    50
                COL    15
                WIDTH  120
                HEIGHT 24
-               VALUE "Borland"
+               VALUE "Harbour Borland"
                FONTNAME "Segoe UI"
                FONTBOLD .T.
                TRANSPARENT .T.
                RIGHTALIGN .T.
-        END LABEL  
+        END LABEL
 
         DEFINE LABEL Label_12
                ROW    50
                COL    15
                WIDTH  120
                HEIGHT 20
-               VALUE "Pelles"
+               VALUE "Harbour Pelles"
                FONTNAME "Segoe UI"
                FONTBOLD .T.
                TRANSPARENT .T.
                RIGHTALIGN .T.
-        END LABEL  
+        END LABEL
 
         DEFINE LABEL Label_8
                ROW    50
                COL    15
                WIDTH  120
                HEIGHT 24
-               VALUE "MingW"
+               VALUE "xHarbour MinGW"
                FONTNAME "Segoe UI"
                FONTBOLD .T.
                TRANSPARENT .T.
                RIGHTALIGN .T.
-        END LABEL  
+        END LABEL
 
         DEFINE LABEL Label_16
                ROW    50
                COL    15
                WIDTH  120
                HEIGHT 24
-               VALUE "Borland"
+               VALUE "xHarbour Borland"
                FONTNAME "Segoe UI"
                FONTBOLD .T.
                TRANSPARENT .T.
@@ -709,12 +728,12 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                COL    15
                WIDTH  120
                HEIGHT 24
-               VALUE "Pelles"
+               VALUE "xHarbour Pelles"
                FONTNAME "Segoe UI"
                FONTBOLD .T.
                TRANSPARENT .T.
                RIGHTALIGN .T.
-        END LABEL  
+        END LABEL
 
         DEFINE TEXTBOX Text_25
                ROW    50
@@ -723,8 +742,9 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                HEIGHT 24
                ONGOTFOCUS This.BackColor := {211,237,250}
                ONLOSTFOCUS This.BackColor := {255,255,225}
+               TOOLTIP "Harbour/Visual C Path"               
                BACKCOLOR {255,255,225}
-        END TEXTBOX 
+        END TEXTBOX
 
         DEFINE TEXTBOX Text_26
                ROW    50
@@ -733,20 +753,21 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                HEIGHT 24
                ONGOTFOCUS This.BackColor := {211,237,250}
                ONLOSTFOCUS This.BackColor := {255,255,225}
+               TOOLTIP "Harbour/Visual C Path"
                BACKCOLOR {255,255,225}
-        END TEXTBOX 
+        END TEXTBOX
 
         DEFINE LABEL Label_26
                ROW    50
                COL    15
                WIDTH  120
                HEIGHT 24
-               VALUE "Visual C"
+               VALUE "Harbour Visual C"
                FONTNAME "Segoe UI"
                FONTBOLD .T.
                TRANSPARENT .T.
                RIGHTALIGN .T.
-        END LABEL  
+        END LABEL
 
         DEFINE BUTTON Button_2
                ROW    50
@@ -755,7 +776,7 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                HEIGHT 28
                ACTION If ( !Empty( Folder := GetFolder() ) , main.text_25.Value := Folder , )
               PICTURE "mfolder"
-        END BUTTON  
+        END BUTTON
 
         DEFINE BUTTON Button_40
                ROW    50
@@ -764,21 +785,21 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                HEIGHT 28
                ACTION If ( !Empty( Folder := GetFolder() ) , main.text_26.Value := Folder , )
               PICTURE "mfolder"
-        END BUTTON  
+        END BUTTON
 
         DEFINE LABEL Label_27
                ROW    50
                COL    15
                WIDTH  120
                HEIGHT 24
-               VALUE "Visual C"
+               VALUE "xHarbour Visual C"
                FONTNAME "Segoe UI"
                FONTBOLD .T.
                TRANSPARENT .T.
                RIGHTALIGN .T.
-        END LABEL  
+        END LABEL
 
-    END PAGE 
+    END PAGE
 
     PAGE 'C Compiler' IMAGE 'tcompiler'
 
@@ -801,8 +822,9 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                HEIGHT 24
                ONGOTFOCUS This.BackColor := {211,237,250}
                ONLOSTFOCUS This.BackColor := {255,255,225}
+               TOOLTIP "MinGW Path"               
                BACKCOLOR {255,255,225}
-        END TEXTBOX 
+        END TEXTBOX
 
         DEFINE BUTTON Button_14
                ROW    50
@@ -810,8 +832,8 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                WIDTH  30
                HEIGHT 28
                ACTION If ( !Empty( Folder := GetFolder() ) , main.text_11.Value := Folder , )
-              PICTURE "mfolder"
-        END BUTTON  
+               PICTURE "mfolder"
+        END BUTTON
 
         DEFINE TEXTBOX Text_12
                ROW    190
@@ -820,8 +842,9 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                HEIGHT 24
                ONGOTFOCUS This.BackColor := {211,237,250}
                ONLOSTFOCUS This.BackColor := {255,255,225}
+               TOOLTIP "MinGW Flags"
                BACKCOLOR {255,255,225}
-        END TEXTBOX 
+        END TEXTBOX
 
         DEFINE TEXTBOX Text_13
                ROW    220
@@ -830,8 +853,9 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                HEIGHT 24
                ONGOTFOCUS This.BackColor := {211,237,250}
                ONLOSTFOCUS This.BackColor := {255,255,225}
+               TOOLTIP "MinGW Linker Flags"               
                BACKCOLOR {255,255,225}
-        END TEXTBOX 
+        END TEXTBOX
 
         DEFINE TEXTBOX Text_32
                ROW    190
@@ -840,8 +864,9 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                HEIGHT 24
                ONGOTFOCUS This.BackColor := {211,237,250}
                ONLOSTFOCUS This.BackColor := {255,255,225}
+               TOOLTIP "Borland C Flags"               
                BACKCOLOR {255,255,225}
-        END TEXTBOX 
+        END TEXTBOX
 
         DEFINE TEXTBOX Text_33
                ROW    220
@@ -850,8 +875,9 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                HEIGHT 24
                ONGOTFOCUS This.BackColor := {211,237,250}
                ONLOSTFOCUS This.BackColor := {255,255,225}
+               TOOLTIP "Borland C Linker Flags"               
                BACKCOLOR {255,255,225}
-        END TEXTBOX 
+        END TEXTBOX
 
         DEFINE TEXTBOX Text_42
                ROW    190
@@ -860,6 +886,7 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                HEIGHT 24
                ONGOTFOCUS This.BackColor := {211,237,250}
                ONLOSTFOCUS This.BackColor := {255,255,225}
+               TOOLTIP "Pelles C Flags"               
                BACKCOLOR {255,255,225}
         END TEXTBOX
 
@@ -870,8 +897,9 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                HEIGHT 24
                ONGOTFOCUS This.BackColor := {211,237,250}
                ONLOSTFOCUS This.BackColor := {255,255,225}
+               TOOLTIP "Pelles C Linker Flags"               
                BACKCOLOR {255,255,225}
-        END TEXTBOX 
+        END TEXTBOX
 
         DEFINE TEXTBOX Text_52
                ROW    190
@@ -880,8 +908,9 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                HEIGHT 24
                ONGOTFOCUS This.BackColor := {211,237,250}
                ONLOSTFOCUS This.BackColor := {255,255,225}
+               TOOLTIP "Visual C Flags"               
                BACKCOLOR {255,255,225}
-        END TEXTBOX 
+        END TEXTBOX
 
         DEFINE TEXTBOX Text_53
                ROW    220
@@ -890,8 +919,9 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                HEIGHT 24
                ONGOTFOCUS This.BackColor := {211,237,250}
                ONLOSTFOCUS This.BackColor := {255,255,225}
+               TOOLTIP "Visual C Linker Flags"               
                BACKCOLOR {255,255,225}
-        END TEXTBOX 
+        END TEXTBOX
 
         DEFINE TEXTBOX Text_16
                ROW    50
@@ -900,8 +930,9 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                HEIGHT 24
                ONGOTFOCUS This.BackColor := {211,237,250}
                ONLOSTFOCUS This.BackColor := {255,255,225}
+               TOOLTIP "Borland C Path"               
                BACKCOLOR {255,255,225}
-        END TEXTBOX 
+        END TEXTBOX
 
         DEFINE TEXTBOX Text_17
                ROW    50
@@ -910,8 +941,9 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                HEIGHT 24
                ONGOTFOCUS This.BackColor := {211,237,250}
                ONLOSTFOCUS This.BackColor := {255,255,225}
+               TOOLTIP "Pelles C Path"               
                BACKCOLOR {255,255,225}
-        END TEXTBOX 
+        END TEXTBOX
 
         DEFINE BUTTON Button_16
                ROW    50
@@ -929,25 +961,7 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                HEIGHT 28
                ACTION If ( !Empty( Folder := GetFolder() ) , main.text_17.Value := Folder , )
               PICTURE "mfolder"
-        END BUTTON  
-
-        DEFINE FRAME Frame_6
-               ROW    30
-               COL    5
-               WIDTH  510
-               HEIGHT 140
-               CAPTION "Compiler"
-               OPAQUE .T.
-        END FRAME  
-
-        DEFINE FRAME Frame_7
-               ROW    170
-               COL    5
-               WIDTH  510
-               HEIGHT 140
-               CAPTION "User Flags"
-               OPAQUE .T.
-        END FRAME  
+        END BUTTON
 
         DEFINE LABEL Label_3
                ROW    50
@@ -959,7 +973,7 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                FONTBOLD .T.
                TRANSPARENT .T.
                RIGHTALIGN .T.
-        END LABEL  
+        END LABEL
 
         DEFINE LABEL Label_7
                ROW    50
@@ -971,31 +985,31 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                FONTBOLD .T.
                TRANSPARENT .T.
                RIGHTALIGN .T.
-        END LABEL  
+        END LABEL
 
         DEFINE LABEL Label_13
                ROW    190
                COL    15
                WIDTH  120
                HEIGHT 24
-               VALUE "C Compiler"
+               VALUE "Flags C Compiler"
                FONTNAME "Segoe UI"
                FONTBOLD .T.
                TRANSPARENT .T.
                RIGHTALIGN .T.
-        END LABEL  
+        END LABEL
 
         DEFINE LABEL Label_14
                ROW    220
                COL    15
                WIDTH  120
                HEIGHT 24
-               VALUE "Linker"
+               VALUE "Flags Linker"
                FONTNAME "Segoe UI"
                FONTBOLD .T.
                TRANSPARENT .T.
                RIGHTALIGN .T.
-        END LABEL  
+        END LABEL
 
         DEFINE TEXTBOX Text_27
                ROW    50
@@ -1004,8 +1018,9 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                HEIGHT 24
                ONGOTFOCUS This.BackColor := {211,237,250}
                ONLOSTFOCUS This.BackColor := {255,255,225}
+               TOOLTIP "Visual C Path"
                BACKCOLOR {255,255,225}
-        END TEXTBOX 
+        END TEXTBOX
 
         DEFINE BUTTON Button_41
                ROW    50
@@ -1014,7 +1029,7 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                HEIGHT 28
                ACTION If ( !Empty( Folder := GetFolder() ) , main.text_27.Value := Folder , )
               PICTURE "mfolder"
-        END BUTTON  
+        END BUTTON
 
         DEFINE LABEL Label_28
                ROW    50
@@ -1026,9 +1041,9 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                FONTBOLD .T.
                TRANSPARENT .T.
                RIGHTALIGN .T.
-        END LABEL  
+        END LABEL
 
-    END PAGE 
+    END PAGE
 
     PAGE 'GUI' IMAGE 'tgui'
 
@@ -1039,8 +1054,9 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                HEIGHT 24
                ONGOTFOCUS This.BackColor := {211,237,250}
                ONLOSTFOCUS This.BackColor := {255,255,225}
+               TOOLTIP "GUI/MinGW/Harbour Path"
                BACKCOLOR {255,255,225}
-        END TEXTBOX 
+        END TEXTBOX
 
         DEFINE TEXTBOX Text_23
                ROW    50
@@ -1049,8 +1065,9 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                HEIGHT 24
                ONGOTFOCUS This.BackColor := {211,237,250}
                ONLOSTFOCUS This.BackColor := {255,255,225}
+               TOOLTIP "GUI/Borland C/Harbour Path"
                BACKCOLOR {255,255,225}
-        END TEXTBOX 
+        END TEXTBOX
 
         DEFINE BUTTON Button_15
                ROW    50
@@ -1059,7 +1076,7 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                HEIGHT 28
                ACTION If ( !Empty( Folder := GetFolder() ) , main.text_14.Value := Folder , )
               PICTURE "mfolder"
-        END BUTTON  
+        END BUTTON
 
         DEFINE BUTTON Button_18
                ROW    50
@@ -1068,7 +1085,7 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                HEIGHT 28
                ACTION If ( !Empty( Folder := GetFolder() ) , main.text_23.Value := Folder , )
               PICTURE "mfolder"
-        END BUTTON  
+        END BUTTON
 
         DEFINE TEXTBOX Text_18
                ROW    50
@@ -1077,8 +1094,9 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                HEIGHT 24
                ONGOTFOCUS This.BackColor := {211,237,250}
                ONLOSTFOCUS This.BackColor := {255,255,225}
+               TOOLTIP "GUI/Pelles C/Harbour Path"               
                BACKCOLOR {255,255,225}
-        END TEXTBOX 
+        END TEXTBOX
 
         DEFINE BUTTON Button_28
                ROW    50
@@ -1087,7 +1105,7 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                HEIGHT 28
                ACTION If ( !Empty( Folder := GetFolder() ) , main.text_18.Value := Folder , )
               PICTURE "mfolder"
-        END BUTTON  
+        END BUTTON
 
         DEFINE TEXTBOX Text_19
                ROW    50
@@ -1096,8 +1114,9 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                HEIGHT 24
                ONGOTFOCUS This.BackColor := {211,237,250}
                ONLOSTFOCUS This.BackColor := {255,255,225}
+               TOOLTIP "GUI/MinGW/xHarbour Path"               
                BACKCOLOR {255,255,225}
-        END TEXTBOX 
+        END TEXTBOX
 
         DEFINE BUTTON Button_29
                ROW    50
@@ -1106,7 +1125,7 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                HEIGHT 28
                ACTION If ( !Empty( Folder := GetFolder() ) , main.text_19.Value := Folder , )
               PICTURE "mfolder"
-        END BUTTON  
+        END BUTTON
 
         DEFINE TEXTBOX Text_21
                ROW    50
@@ -1115,8 +1134,9 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                HEIGHT 24
                ONGOTFOCUS This.BackColor := {211,237,250}
                ONLOSTFOCUS This.BackColor := {255,255,225}
+               TOOLTIP "GUI/Borland C/xHarbour Path"               
                BACKCOLOR {255,255,225}
-        END TEXTBOX 
+        END TEXTBOX
 
         DEFINE BUTTON Button_30
                ROW    50
@@ -1134,8 +1154,9 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                HEIGHT 24
                ONGOTFOCUS This.BackColor := {211,237,250}
                ONLOSTFOCUS This.BackColor := {255,255,225}
+               TOOLTIP "GUI/Pelles C/xHarbour Path"               
                BACKCOLOR {255,255,225}
-        END TEXTBOX 
+        END TEXTBOX
 
         DEFINE BUTTON Button_31
                ROW    50
@@ -1144,25 +1165,7 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                HEIGHT 28
                ACTION If ( !Empty( Folder := GetFolder() ) , main.text_22.Value := Folder , )
               PICTURE "mfolder"
-        END BUTTON  
-
-        DEFINE FRAME Frame_9
-               ROW    30
-               COL    5
-               WIDTH  510
-               HEIGHT 140
-               CAPTION "GUI Harbour"
-               OPAQUE .T.
-        END FRAME
-
-        DEFINE FRAME Frame_10
-               ROW    30
-               COL    5
-               WIDTH  510
-               HEIGHT 140
-               CAPTION "GUI xHarbour"
-               OPAQUE .T.
-        END FRAME  
+        END BUTTON
 
         DEFINE LABEL Label_15
                ROW    50
@@ -1174,7 +1177,7 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                FONTBOLD .T.
                TRANSPARENT .T.
                RIGHTALIGN .T.
-        END LABEL  
+        END LABEL
 
         DEFINE LABEL Label_18
                ROW    50
@@ -1198,7 +1201,7 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                FONTBOLD .T.
                TRANSPARENT .T.
                RIGHTALIGN .T.
-        END LABEL  
+        END LABEL
 
         DEFINE LABEL Label_21
                ROW    50
@@ -1210,7 +1213,7 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                FONTBOLD .T.
                TRANSPARENT .T.
                RIGHTALIGN .T.
-        END LABEL  
+        END LABEL
 
         DEFINE LABEL Label_22
                ROW    50
@@ -1222,7 +1225,7 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                FONTBOLD .T.
                TRANSPARENT .T.
                RIGHTALIGN .T.
-        END LABEL  
+        END LABEL
 
         DEFINE LABEL Label_23
                ROW    50
@@ -1234,7 +1237,7 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                FONTBOLD .T.
                TRANSPARENT .T.
                RIGHTALIGN .T.
-        END LABEL  
+        END LABEL
 
         DEFINE TEXTBOX Text_29
                ROW    50
@@ -1243,8 +1246,9 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                HEIGHT 24
                ONGOTFOCUS This.BackColor := {211,237,250}
                ONLOSTFOCUS This.BackColor := {255,255,225}
+               TOOLTIP "GUI/Visual C/Harbour Path"               
                BACKCOLOR {255,255,225}
-        END TEXTBOX 
+        END TEXTBOX
 
         DEFINE BUTTON Button_42
                ROW    50
@@ -1253,7 +1257,7 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                HEIGHT 28
                ACTION If ( !Empty( Folder := GetFolder() ) , main.text_29.Value := Folder , )
               PICTURE "mfolder"
-        END BUTTON  
+        END BUTTON
 
         DEFINE TEXTBOX Text_30
                ROW    50
@@ -1262,6 +1266,7 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                HEIGHT 24
                ONGOTFOCUS This.BackColor := {211,237,250}
                ONLOSTFOCUS This.BackColor := {255,255,225}
+               TOOLTIP "GUI/Visual C/xHarbour Path"               
                BACKCOLOR {255,255,225}
         END TEXTBOX
 
@@ -1272,7 +1277,7 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                HEIGHT 28
                ACTION If ( !Empty( Folder := GetFolder() ) , main.text_30.Value := Folder , )
               PICTURE "mfolder"
-        END BUTTON  
+        END BUTTON
 
         DEFINE LABEL Label_30
                ROW    50
@@ -1284,7 +1289,7 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                FONTBOLD .T.
                TRANSPARENT .T.
                RIGHTALIGN .T.
-        END LABEL  
+        END LABEL
 
         DEFINE LABEL Label_31
                ROW    50
@@ -1296,17 +1301,7 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                FONTBOLD .T.
                TRANSPARENT .T.
                RIGHTALIGN .T.
-        END LABEL  
-
-        DEFINE FRAME Frame_15
-               ROW    170
-               COL    5
-               WIDTH  510
-               HEIGHT 140
-               FONTNAME 'Arial'
-               CAPTION "Tools"
-               OPAQUE .T.
-        END FRAME  
+        END LABEL
 
         DEFINE TEXTBOX Text_28
                ROW    190
@@ -1316,6 +1311,7 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                FONTNAME 'Arial'
                ONGOTFOCUS This.BackColor := {211,237,250}
                ONLOSTFOCUS This.BackColor := {255,255,225}
+               TOOLTIP "UPX.EXE Path"               
                BACKCOLOR {255,255,225}
         END TEXTBOX
 
@@ -1326,7 +1322,7 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                HEIGHT 28
                ACTION If ( !Empty( sFile := GetFile() ) , main.text_28.Value := sFile , )
               PICTURE "mfolder"
-        END BUTTON  
+        END BUTTON
 
         DEFINE TEXTBOX Text_31
                ROW    230
@@ -1336,8 +1332,9 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                FONTNAME 'Arial'
                ONGOTFOCUS This.BackColor := {211,237,250}
                ONLOSTFOCUS This.BackColor := {255,255,225}
+               TOOLTIP "Form Edit Path"               
                BACKCOLOR {255,255,225}
-        END TEXTBOX 
+        END TEXTBOX
 
         DEFINE BUTTON Button_10
                ROW    230
@@ -1356,8 +1353,9 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                FONTNAME 'Arial'
                ONGOTFOCUS This.BackColor := {211,237,250}
                ONLOSTFOCUS This.BackColor := {255,255,225}
+               TOOLTIP "Text Editor Path"               
                BACKCOLOR {255,255,225}
-        END TEXTBOX 
+        END TEXTBOX
 
         DEFINE BUTTON Button_21
                ROW    270
@@ -1366,7 +1364,7 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                HEIGHT 28
                ACTION If ( !Empty( sFile := GetFile() ) , main.text_15.Value := sFile , )
               PICTURE "mfolder"
-        END BUTTON  
+        END BUTTON
 
         DEFINE LABEL Label_32
                ROW    190
@@ -1377,7 +1375,7 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                FONTBOLD .T.
                TRANSPARENT .T.
                RIGHTALIGN .T.
-        END LABEL  
+        END LABEL
 
         DEFINE LABEL Label_33
                ROW    230
@@ -1388,7 +1386,7 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                FONTBOLD .T.
                TRANSPARENT .T.
                RIGHTALIGN .T.
-        END LABEL  
+        END LABEL
 
         DEFINE LABEL Label_34
                ROW    270
@@ -1401,15 +1399,15 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                RIGHTALIGN .T.
         END LABEL
 
-    END PAGE 
+    END PAGE
 
     PAGE 'Libraries' IMAGE 'tlibraries'
 
         DEFINE LISTBOX List_2
                ROW    60
-               COL    20
-               WIDTH  360
-               HEIGHT 240
+               COL    10
+               WIDTH  Main.Width - 180
+               HEIGHT Main.Tab_1.Height - 70
                ITEMS {}
                ONGOTFOCUS This.BackColor := {211,237,250}
                ONLOSTFOCUS This.BackColor := {255,255,225}
@@ -1417,9 +1415,12 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                MULTISELECT .T.
         END LISTBOX
 
+        oLst2 := GetControlObject("List_2","main")
+        oLst2:Anchor := "TOPLEFTBOTTOMRIGHT"
+
         DEFINE BUTTON Button_38
                ROW    60
-               COL    395
+               COL    Main.List_2.Width + 35
                WIDTH  105
                HEIGHT 28
                ACTION AddLibFiles()
@@ -1427,9 +1428,12 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
               PICTURE "madd"
         END BUTTON
 
+        oBtn38 := GetControlObject("Button_38","main")
+        oBtn38:Anchor := "TOPRIGHT"
+
         DEFINE BUTTON Button_20
                ROW    90
-               COL    395
+               COL    Main.List_2.Width + 35
                WIDTH  105
                HEIGHT 28
                ACTION RemoveLibFile()
@@ -1437,42 +1441,43 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
               PICTURE "mremove"
         END BUTTON
 
+        oBtn20 := GetControlObject("Button_20","main")
+        oBtn20:Anchor := "TOPRIGHT"
+
         DEFINE LABEL Label_19
                ROW    40
-               COL    20
+               COL    10
                WIDTH  350
                HEIGHT 24
                VALUE "Default files to link into your project (*.LIB/*.a)"
                FONTNAME "Segoe UI"
                FONTBOLD .T.
                TRANSPARENT .T.
-        END LABEL  
-
-        DEFINE FRAME Frame_11
-               ROW    30
-               COL    5
-               WIDTH  510
-               HEIGHT 280
-               OPAQUE .T.
-        END FRAME
+        END LABEL
 
         DEFINE IMAGE Image_2
                ROW    150
-               COL    395
+               COL    Main.List_2.Width + 35
                WIDTH  105
                HEIGHT 64
                PICTURE "mharbour"
                STRETCH .T.
         END IMAGE
 
+        oImg2 := GetControlObject("Image_2","main")
+        oImg2:Anchor := "TOPRIGHT"
+
         DEFINE IMAGE Image_3
                ROW    235
-               COL    395
+               COL    Main.List_2.Width + 35
                WIDTH  105
                HEIGHT 64
                PICTURE "mxharbour"
                STRETCH .T.
         END IMAGE
+
+        oImg3 := GetControlObject("Image_3","main")
+        oImg3:Anchor := "TOPRIGHT"
 
     END PAGE
 
@@ -1481,8 +1486,8 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
         DEFINE EDITBOX RichEdit_1
                ROW    43
                COL    10
-               WIDTH  500
-               HEIGHT 260
+               WIDTH  Main.Width - 35
+               HEIGHT Main.Tab_1.Height - 55
                FONTNAME "Segoe UI"
                ONGOTFOCUS This.BackColor := {211,237,250}
                ONLOSTFOCUS This.BackColor := {255,255,225}
@@ -1490,99 +1495,23 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
                BACKCOLOR {255,255,225}
         END EDITBOX
 
-        DEFINE FRAME Frame_12
-               ROW    30
-               COL    5
-               WIDTH  510
-               HEIGHT 280
-               OPAQUE .T.
-        END FRAME  
+        oEdi := GetControlObject("RichEdit_1","main")
+        oEdi:Anchor := "TOPLEFTBOTTOMRIGHT"
 
-    END PAGE 
+    END PAGE
 
   END TAB
 
-     DEFINE IMAGE Image_1
-            ROW    0
-            COL    520
-            WIDTH  100
-            HEIGHT 100
-            PICTURE "Logop"
-            ACTION About()
-     END IMAGE
 
-     DEFINE BUTTON Button_19
-            ROW    100
-            COL    520
-            WIDTH  100
-            HEIGHT 28
-            ACTION New()
-            CAPTION "New Proj"
-           PICTURE "mnew"
-     END BUTTON  
+  oTab := GetControlObject("Tab_1","main")
+  oTab:Anchor := "TOPLEFTBOTTOMRIGHT"
 
-     DEFINE BUTTON Button_32
-            ROW    130
-            COL    520
-            WIDTH  100
-            HEIGHT 28
-            ACTION OpenMPM()
-            CAPTION "F3 Open"
-           PICTURE "mopen"
-     END BUTTON  
+  oTab2 := GetControlObject("Tab_2","main")
+  oTab2:Anchor := "TOPLEFTBOTTOMRIGHT"
 
-     DEFINE BUTTON Button_33
-            ROW    160
-            COL    520
-            WIDTH  100
-            HEIGHT 28
-            ACTION Save()
-            CAPTION "F2 Save"
-           PICTURE "msave"
-     END BUTTON  
-
-     DEFINE BUTTON Button_34
-            ROW    196
-            COL    520
-            WIDTH  100
-            HEIGHT 28
-            ACTION BuildMode(main.radiogroup_7.value,main.radiogroup_6.value,main.radiogroup_5.value)
-            CAPTION "F4 Build"
-           PICTURE "mbuild"
-     END BUTTON  
-
-     DEFINE BUTTON Button_35
-            ROW    226
-            COL    520
-            WIDTH  100
-            HEIGHT 28
-            ACTION Run()
-            CAPTION "F5 Run"
-           PICTURE "mrun"
-     END BUTTON  
-
-     DEFINE BUTTON Button_36
-            ROW    262
-            COL    520
-            WIDTH  100
-            HEIGHT 28
-            ACTION ExitProg()
-            CAPTION "F10 Exit"
-           PICTURE "mexit"
-     END BUTTON
-
-     DEFINE BUTTON Button_37
-            ROW    292
-            COL    520
-            WIDTH  100
-            HEIGHT 28
-            ACTION AsociarMPM()
-            CAPTION "Associate"
-           PICTURE "massoc"
-     END BUTTON  
 
      DEFINE RADIOGROUP RadioGroup_4
-            ROW    330
+            ROW    Main.Height - 200
             COL    10
             WIDTH  90
             OPTIONS {'Incremental','Rebuild'}
@@ -1591,8 +1520,11 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
             BACKCOLOR {255,255,255}
      END RADIOGROUP
 
+     oRad4 := GetControlObject("RadioGroup_4","main")
+     oRad4:Anchor := "LEFTBOTTOM"
+
      DEFINE RADIOGROUP RadioGroup_3
-            ROW    331
+            ROW    Main.Height - 200
             COL    111
             WIDTH  90
             OPTIONS {'GUI','Console','Mixed'}
@@ -1601,8 +1533,11 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
             BACKCOLOR {255,255,255}
      END RADIOGROUP
 
+     oRad3 := GetControlObject("RadioGroup_3","main")
+     oRad3:Anchor := "LEFTBOTTOM"
+
      DEFINE RADIOGROUP RadioGroup_2
-            ROW    331
+            ROW    Main.Height - 200
             COL    211
             WIDTH  90
             OPTIONS {'Normal','Debug'}
@@ -1611,8 +1546,11 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
             BACKCOLOR {255,255,255}
      END RADIOGROUP
 
+     oRad2 := GetControlObject("RadioGroup_2","main")
+     oRad2:Anchor := "LEFTBOTTOM"
+
      DEFINE RADIOGROUP RadioGroup_7
-            ROW    331
+            ROW    Main.Height - 200
             COL    311
             WIDTH  90
             OPTIONS {'Executable','Library'}
@@ -1621,8 +1559,11 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
             BACKCOLOR {255,255,255}
      END RADIOGROUP
 
+     oRad7 := GetControlObject("RadioGroup_7","main")
+     oRad7:Anchor := "LEFTBOTTOM"
+
      DEFINE RADIOGROUP RadioGroup_5
-            ROW    331
+            ROW    Main.Height - 200
             COL    521
             WIDTH  90
             OPTIONS {'Harbour','xHarbour'}
@@ -1632,8 +1573,11 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
             BACKCOLOR {255,255,255}
      END RADIOGROUP
 
+     oRad5 := GetControlObject("RadioGroup_5","main")
+     oRad5:Anchor := "LEFTBOTTOM"
+
      DEFINE RADIOGROUP RadioGroup_6
-            ROW    331
+            ROW    Main.Height - 200
             COL    421
             WIDTH  90
             OPTIONS {'MinGW','Borland','Pelles','Visual C'}
@@ -1643,13 +1587,8 @@ DEFINE WINDOW TEMPLATE AT 196 , 293 WIDTH 630 HEIGHT 496 TITLE "(c) MigSoft Proj
             BACKCOLOR {255,255,255}
      END RADIOGROUP
 
-     DEFINE FRAME Frame_14
-            ROW    320
-            COL    5
-            WIDTH  614
-            HEIGHT 115
-            OPAQUE .T.
-     END FRAME
+     oRad6 := GetControlObject("RadioGroup_6","main")
+     oRad6:Anchor := "LEFTBOTTOM"
 
      DEFINE TIMER Timer_1 INTERVAL 500 ACTION StatusRefresh()
 

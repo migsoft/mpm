@@ -44,7 +44,7 @@ Function Main( cMpm )
            Endif
         EndIf
         DefineWindowHotKeys()
-   Center window Main
+   //Center window Main
    Activate window Main
 
 Return Nil
@@ -698,8 +698,7 @@ Return
 Procedure CorreBuildBat()
 *---------------------------------------------------------------------*
       EXECUTE FILE PROJECTFOLDER + If ( Right ( PROJECTFOLDER , 1 ) != '\' , '\' , '' ) + '_Build.Bat' Hide
-      main.RichEdit_1.Value := TranslateLog ( MemoRead ( PROJECTFOLDER + '\_Temp.Log' ) )
-      DO EVENTS
+      break
 Return
 *---------------------------------------------------------------------*
 Procedure StatusRefresh()
@@ -712,11 +711,96 @@ Procedure StatusRefresh()
          Procesando(2)
          CursorArrow2()
          BorraTemporales()
+      Else
+         If iswindowdefined("MigMess")
+            MigMess.lblMensajes.value := 'Compiling... ' + ElapTime( cStartTime, Time() )
+         Endif
+         main.RichEdit_1.Value := TranslateLog ( MemoRead ( PROJECTFOLDER + '\_Temp.Log' ) )
+         main.RichEdit_1.CaretPos := Len( main.RichEdit_1.Value )
       Endif
    Endif
    DO EVENTS
 Return
 
+*---------------------------------------------------------------------*
+Function TranslateLog( Log )
+*---------------------------------------------------------------------*
+   Local NewLog := '' , i, c
+
+   For i := 1 To Len(Log) - 1
+       c := SubStr ( Log , i , 2 )
+       If Left ( c , 1 ) == Chr (13) .And. Right ( c , 1 ) != Chr ( 10 )
+          NewLog := NewLog + NewLi
+       Else
+          NewLog := NewLog + Left ( c , 1 )
+       EndIf
+   Next i
+
+Return NewLog
+
+Function FindError()
+   local cString := "Error"
+   local cText   := TranslateLog ( MemoRead ( PROJECTFOLDER + '\_Temp.Log' ) )
+   local nStart  := AT( cString, cText )
+
+   if nStart > 0
+      TextBoxEditSetSel( 'Main', 'RichEdit_1', ( nStart - 1 ), ( nStart - 1 ) + len( cString ) )
+      Main.RichEdit_1.caretpos := Main.RichEdit_1.caretpos - 5
+      Main.RichEdit_1.setfocus
+   endif
+
+Return nil
+
+Function TextBoxEditSetSel( cParent, cControl, nStart, nEnd )
+   local nHandle := GetControlHandle( cControl, cParent )
+
+   TextBoxSetSel( nHandle, nStart, nEnd )
+
+Return nil
+
+#pragma BEGINDUMP
+
+#include <windows.h>
+#include <commctrl.h>
+#include "hbapi.h"
+#include <wingdi.h>
+
+HB_FUNC ( TEXTBOXSETSEL )
+{
+   HWND hWnd1;
+   hWnd1 = (HWND) hb_parnl (1);
+   SendMessage((HWND) hWnd1,EM_SETSEL, (WPARAM)(int) hb_parni(2),(LPARAM) (int) hb_parni(3));
+}
+
+HB_FUNC ( SCROLLCARET )
+{
+   HWND hWnd = (HWND) hb_parnl (1);
+   SendMessage((HWND) hWnd,EM_SCROLLCARET,(WPARAM)(int) 1,(LPARAM)(int) 0);
+}
+
+#pragma ENDDUMP
+
+
+FUNCTION LogProg( cLog )
+
+  LOCAL nMaxLen := 1280
+  LOCAL cCR     := Chr( 0x0D )
+  LOCAL cProg   := MemoLine( cLog, nMaxLen, 1 ) + CRLF + MemoLine( cLog, nMaxLen, 2 )
+  LOCAL nComPos := At( 'Compiling ', cLog )
+  LOCAL nNumPos := RAt( '00' + cCR, cLog )
+  LOCAL nLeft
+  LOCAL nLen
+  LOCAL nLine
+
+  IF !Empty( nComPos ) .AND. !Empty( nNumPos )
+    nLine := MPosToLC( cLog, nMaxLen, nComPos )[ 1 ]
+    nLeft := RAt( cCR, Left( cLog, nNumPos ) ) + 1
+    nLen  := At( cCR, SubStr( cLog, nLeft ) + cCR ) - 1
+    cProg += CRLF + RTrim( MemoLine( cLog, nMaxLen, nLine ) ) + ' ' + ;
+      SubStr( cLog, nLeft, nLen )
+  ENDIF
+
+RETURN cProg
 
 *---------------------------------------------------------------------*
 Procedure BorraTemporales()
@@ -735,8 +819,9 @@ Procedure BorraTemporales()
       oPath := AllTrim(main.Text_1.value)
       oFile := AllTrim(main.Text_2.value)
 
-      Ferase(oPath +'\'+'_Build.log')
       If main.Check_bat.value
+         Ferase(oPath +'\'+'_Build.log')
+         Ferase(oPath +'\'+'_Temp.log')
          Ferase(oPath +'\'+'_Build.bat')
          Ferase(oPath +'\'+'Makefile.Gcc')
          Ferase(oPath +'\'+'b32.bc')
@@ -772,15 +857,85 @@ Procedure Procesando( nOpt )
            Main.StatusBar.Item(2) := 'Status: Building...'
            Main.StatusBar.Icon(2) := 'Process'
       Case nOpt == 2
+        If File ( PROJECTFOLDER + '\End.Txt' )
            Main.StatusBar.Item(2) := 'Status: Idle...'
            Main.StatusBar.Icon(2) := 'Build'
+           QuitarEspera()
+           RunOutPut()
+        Endif
    Endcase
 Return
+
+Procedure RunOutPut()
+
+  If File(PROJECTFOLDER+'\'+GetName(ExeName)+'.exe') .and. TxtSearch('error') == .F.
+         if MsgYesNo('Execute File: ['+ GetName(ExeName)+'.exe] ?',"Project Build") == .T.
+            If main.Check_1.value == .T.
+                  PonerEspera('Compress...')
+                  ComprimoExe( PROJECTFOLDER, GetName(ExeName) )
+                  QuitarEspera()
+            Endif
+            EXECUTE FILE PROJECTFOLDER +'\'+GetName(ExeName)
+         Else
+            AutoMsgInfo( ExeName,GetName( ExeName ) )
+            main.RichEdit_1.Setfocus
+         Endif
+  Endif
+
+  If ( main.RadioGroup_7.Value == 2 ) // Librarie
+     If File( ExeName ) .and. TxtSearch('error') == .F.
+        MsgInfo("Librarie: "+GetName(ExeName)+" is Ok !!!")
+     Endif
+  Endif
+
+  Iif( !Empty(FindError()), MsgInfo( "Error al compilar !!!" ), )
+
+Return
+
+*---------------------------------------------------------------------*
+Function TxtSearch(cText)
+*---------------------------------------------------------------------*
+    npostext := 0
+    cText := Rtrim(cText)
+    if len(cText) > 0
+       lEnc := NextSearch(cText)
+    endif
+return( lEnc )
+
+*---------------------------------------------------------------------*
+Function NextSearch(cText)
+*---------------------------------------------------------------------*
+   local todo,lBus
+   todo := strtran( main.RichEdit_1.value,chr(13),"" )
+   nPostext := MyAt( upper(ctext), upper(todo), nPostext + len(ctext))
+   if nPostext > 0
+      main.RichEdit_1.setfocus()
+      main.RichEdit_1.caretpos := nPostext - 1
+      lBus := .T.
+   else
+      main.RichEdit_1.setfocus()
+      lBus := .F.
+   endif
+return lBus
+
+*---------------------------------------------------------------------*
+Function MyAt(cBusca,cTodo,nInicio)
+*---------------------------------------------------------------------*
+   local i,nposluna
+   nPosluna := 0
+   for i := nInicio to len(cTodo)
+       DO EVENTS
+       if UPPER(SUBSTR(cTodo,i,len(cBusca))) = UPPER(cBusca)
+          nPosluna := i
+          exit
+       endif
+   next i
+Return(nPosluna)
+
 *---------------------------------------------------------------------*
 FUNCTION PonerEspera( cMensaje)
 *---------------------------------------------------------------------*
 
-   cStartTime := Time()
    DEFINE WINDOW MigMess AT 323,389 WIDTH 277 HEIGHT 80 TITLE cAppName ;
       MODAL NOMINIMIZE NOMAXIMIZE NOSIZE NOSYSMENU NOCAPTION BACKCOLOR {255,0,0}
 
@@ -806,6 +961,23 @@ FUNCTION QuitarEspera( )
    Endif
 
 RETURN(NIL)
+
+
+Procedure OpcTools( nOpc )
+
+   main.tab_1.value := 5
+
+   Do Case
+      Case nOpc = 1  // Text Editor
+           main.text_15.SetFocus
+      Case nOpc = 2  // Form Editor
+           main.text_31.SetFocus
+      Case nOpc = 3  // Compress EXE
+           main.text_28.SetFocus
+   EndCase
+
+Return
+
 *---------------------------------------------------------------------*
 Procedure StartCtrls()
 *---------------------------------------------------------------------*
@@ -1016,13 +1188,6 @@ Procedure BuildMode(nModo,nCChoice,nHChoice)
 
     Aadd( cPrgFile , Alltrim(main.List_1.Item(1)) )
 
-
-    //If !VerifyTop( cPrgFile[1] )
-    //   MsgInfo("Select Main Source File")
-    //   Main.Tab_1.value := 2
-    //   Return
-    //Endif
-
     DateMod()
 
     FMGFOLDER := FilPathInList("FMG")
@@ -1077,21 +1242,6 @@ Procedure BuildMode(nModo,nCChoice,nHChoice)
 
 Return
 
-*---------------------------------------------------------------------*
-Function TranslateLog( Log )
-*---------------------------------------------------------------------*
-   Local NewLog := '' , i, c
-
-   For i := 1 To Len(Log) - 1
-       c := SubStr ( Log , i , 2 )
-       If Left ( c , 1 ) == Chr (13) .And. Right ( c , 1 ) != Chr ( 10 )
-          NewLog := NewLog + NewLi
-       Else
-          NewLog := NewLog + Left ( c , 1 )
-       EndIf
-   Next i
-
-Return NewLog
 *---------------------------------------------------------------------*
 Procedure AsignCtrl(nOpt)
 *---------------------------------------------------------------------*
@@ -1348,17 +1498,17 @@ Return(cHblibs)
 *---------------------------------------------------------------------*
 Function Auto_GUI(cRuta)
 *---------------------------------------------------------------------*
-   If File(cRuta+'\lib\oohg.lib') .and. (main.check_64.value == .F.)
+   If File(cRuta+'\lib\oohg.lib') .and. (main.check_64.value == .F.) .and. ! main.RadioGroup_6.value == 1
       cRuta := cRuta + '\lib'
-   ElseIf File(cRuta+'\lib\minigui.lib')
+   ElseIf File(cRuta+'\lib\minigui.lib') .and. ! main.RadioGroup_6.value == 1
       cRuta := cRuta + '\lib'
-   ElseIf File(cRuta+'\lib\fivehc.lib')
+   ElseIf File(cRuta+'\lib\fivehc.lib') .and. ! main.RadioGroup_6.value == 1
       cRuta := cRuta + '\lib'
-   ElseIf File(cRuta+'\lib\libminigui.a')
+   ElseIf File(cRuta+'\lib\libminigui.a') .and. main.RadioGroup_6.value == 1
       cRuta := cRuta + '\lib'
-   ElseIf File(cRuta+'\lib\libhmg.a')
+   ElseIf File(cRuta+'\lib\libhmg.a') .and. main.RadioGroup_6.value == 1
       cRuta := cRuta + '\lib'
-   ElseIf File(cRuta+'\lib\hb\bcc\oohg.lib')
+   ElseIf File(cRuta+'\lib\hb\bcc\oohg.lib') .and. ! main.RadioGroup_6.value == 1
       cRuta := cRuta + '\lib\hb\bcc'
    ElseIf File(cRuta+'\lib\hb\pocc\oohg.lib') .and. (main.check_64.value == .F.)
       cRuta := cRuta + '\lib\hb\pocc'
@@ -1401,45 +1551,7 @@ Function Auto_GUI(cRuta)
    Endif
 
 Return(nWathGui)
-*---------------------------------------------------------------------*
-Function TxtSearch(cText)
-*---------------------------------------------------------------------*
-    npostext := 0
-    cText := Rtrim(cText)
-    if len(cText) > 0
-       lEnc := NextSearch(cText)
-    endif
-return( lEnc )
 
-#DEFINE CR chr(13)
-*---------------------------------------------------------------------*
-Function NextSearch(cText)
-*---------------------------------------------------------------------*
-   local todo,lBus
-   todo := strtran( main.RichEdit_1.value,CR,"" )
-   nPostext := MyAt( upper(ctext), upper(todo), nPostext + len(ctext))
-   if nPostext > 0
-      main.RichEdit_1.setfocus()
-      main.RichEdit_1.caretpos := nPostext - 1
-      lBus := .T.
-   else
-      main.RichEdit_1.setfocus()
-      lBus := .F.
-   endif
-return lBus
-*---------------------------------------------------------------------*
-Function MyAt(cBusca,cTodo,nInicio)
-*---------------------------------------------------------------------*
-   local i,nposluna
-   nPosluna := 0
-   for i := nInicio to len(cTodo)
-       DO EVENTS
-       if UPPER(SUBSTR(cTodo,i,len(cBusca))) = UPPER(cBusca)
-          nPosluna := i
-          exit
-       endif
-   next i
-Return(nPosluna)
 *---------------------------------------------------------------------*
 Procedure MakeInclude(cPathGUI,nGUI)
 *---------------------------------------------------------------------*
@@ -1483,7 +1595,16 @@ Procedure Crea_temp_rc( cFilerc )  // File _temp.rc
                     DosComm1 := '/c copy /b "'+cRcs+' "'+MINIGUIFOLDER+'\resources\_temp.rc"'+' >NUL'
                  Endif
             CASE WATHGUI == 3  // HMG
-                 DosComm1 := '/c copy /b "'+MINIGUIFOLDER+'\resources\hmg.rc'+'"+"'+cFilerc2+'.rc'+'"+"'+MINIGUIFOLDER+'\resources\filler"'+' "'+MINIGUIFOLDER+'\resources\_temp.rc"'+' >NUL'
+                 If main.check_64.value == .T.
+                    cRes := "hmg64.rc"
+                 Else
+                    If File( MINIGUIFOLDER+'\resources\hmg.rc' )
+                       cRes := "hmg.rc" 
+                    Else                     
+                       cRes := "hmg32.rc"
+                    Endif   
+                 Endif
+                 DosComm1 := '/c copy /b "'+MINIGUIFOLDER+'\resources\'+cRes+'"+"'+cFilerc2+'.rc'+'"+"'+MINIGUIFOLDER+'\resources\filler"'+' "'+MINIGUIFOLDER+'\resources\_temp.rc"'+' >NUL'
             CASE WATHGUI == 4  // FWH
                  DosComm1 := '/c copy /b ' + cFilerc2 + '.rc  _temp.rc >NUL'
             OTHERWISE
@@ -1507,7 +1628,16 @@ Procedure Crea_temp_rc( cFilerc )  // File _temp.rc
                     DosComm1 := "/c copy /b "+cRcs+" "+MINIGUIFOLDER+"\resources\_temp.rc >NUL"
                  Endif
             CASE WATHGUI == 3
-                 DosComm1 := "/c copy /b "+MINIGUIFOLDER+"\resources\hmg.rc "+MINIGUIFOLDER+"\resources\_temp.rc >NUL"
+                 If main.check_64.value == .T.
+                    cRes := "hmg64.rc"
+                 Else
+                    If File( MINIGUIFOLDER+'\resources\hmg.rc' )
+                       cRes := "hmg.rc" 
+                    Else                     
+                       cRes := "hmg32.rc"
+                    Endif   
+                 Endif
+                 DosComm1 := "/c copy /b "+MINIGUIFOLDER+"\resources\"+cRes+" "+MINIGUIFOLDER+"\resources\_temp.rc >NUL"
             CASE WATHGUI == 4
                  DosComm1 := '/c Echo // > '+PROJECTFOLDER+'\_temp.rc'
             OTHERWISE
@@ -1540,8 +1670,6 @@ Procedure FocoEnText()
 
    Do Case
       Case main.RadioGroup_6.Value = 1 .AND. main.RadioGroup_5.Value = 1 .AND. main.Tab_1.Value = 3 // MinGW - Harbour
-           main.Frame_2.Show
-           // main.Frame_37.Show
            main.Label_9.Show
            main.Button_12.Show
            main.Label_25.Show
@@ -1552,8 +1680,6 @@ Procedure FocoEnText()
            main.text_8.Setfocus  // cHbMinGWFolder
 
       Case main.RadioGroup_6.Value = 1 .AND. main.RadioGroup_5.Value = 2 .AND. main.Tab_1.Value = 3 // MinGW - xHarbour
-           main.Frame_3.Show
-           // main.Frame_37.Show
            main.Label_8.Show
            main.Button_25.Show
            main.Label_25.Show
@@ -1564,8 +1690,6 @@ Procedure FocoEnText()
            main.text_3.Setfocus  // cxHbMinGWFolder
 
       Case main.RadioGroup_6.Value = 2 .AND. main.RadioGroup_5.Value = 1 .AND. main.Tab_1.Value = 3 // Borland - Harbour
-           main.Frame_2.Show
-           // main.Frame_37.Show
            main.Label_10.Show
            main.Button_13.Show
            main.Label_25.Show
@@ -1576,8 +1700,6 @@ Procedure FocoEnText()
            main.text_20.Setfocus // cHbBCCFolder
 
       Case main.RadioGroup_6.Value = 2 .AND. main.RadioGroup_5.Value = 2 .AND. main.Tab_1.Value = 3 // Borland - xHarbour
-           main.Frame_3.Show
-           // main.Frame_37.Show
            main.Label_16.Show
            main.Button_26.Show
            main.Label_25.Show
@@ -1588,8 +1710,6 @@ Procedure FocoEnText()
            main.text_4.Setfocus // cxHbBCCFolder
 
       Case main.RadioGroup_6.Value = 3 .AND. main.RadioGroup_5.Value = 1 .AND. main.Tab_1.Value = 3  // Pelles - Harbour
-           main.Frame_2.Show
-           // main.Frame_37.Show
            main.Label_12.Show
            main.Button_24.Show
            main.Label_25.Show
@@ -1600,8 +1720,6 @@ Procedure FocoEnText()
            main.text_9.Setfocus // cHbPellFolder
 
       Case main.RadioGroup_6.Value = 3 .AND. main.RadioGroup_5.Value = 2 .AND. main.Tab_1.Value = 3 // Pelles - xHarbour
-           main.Frame_3.Show
-           // main.Frame_37.Show
            main.Label_17.Show
            main.Button_27.Show
            main.Label_25.Show
@@ -1612,8 +1730,6 @@ Procedure FocoEnText()
            main.text_10.Setfocus  // cxHbPellFolder
 
       Case main.RadioGroup_6.Value = 4 .AND. main.RadioGroup_5.Value = 1 .AND. main.Tab_1.Value = 3 // Visual - Harbour
-           main.Frame_2.Show
-           // main.Frame_37.Show
            main.Label_26.Show
            main.Button_2.Show
            main.Label_25.Show
@@ -1624,8 +1740,6 @@ Procedure FocoEnText()
            main.text_25.Setfocus  // cHbVisuaFolder
 
       Case main.RadioGroup_6.Value = 4 .AND. main.RadioGroup_5.Value = 2 .AND. main.Tab_1.Value = 3 // Visual - xHarbour
-           main.Frame_3.Show
-           // main.Frame_37.Show
            main.Label_27.Show
            main.Button_40.Show
            main.Label_25.Show
@@ -1636,9 +1750,6 @@ Procedure FocoEnText()
            main.text_26.Setfocus  // cxHbVisuaFolder
 
       Case main.RadioGroup_6.Value = 1 .AND. main.Tab_1.Value = 4 // MinGW
-           // main.Frame_6.Show
-           // main.Frame_7.Show
-
            main.Label_11.Show
            main.Button_14.Show
 
@@ -1651,9 +1762,6 @@ Procedure FocoEnText()
            main.text_11.Show     // cMinGWFolder
 
       Case main.RadioGroup_6.Value = 2 .AND. main.Tab_1.Value = 4 // Borland
-           // main.Frame_6.Show
-           // main.Frame_7.Show
-
            main.Label_3.Show
            main.Button_16.Show
 
@@ -1666,9 +1774,6 @@ Procedure FocoEnText()
            main.text_16.Setfocus // cBCCFolder
 
       Case main.RadioGroup_6.Value = 3 .AND. main.Tab_1.Value = 4 // Pelles
-           // main.Frame_6.Show
-           // main.Frame_7.Show
-
            main.Label_7.Show
            main.Button_17.Show
 
@@ -1681,9 +1786,6 @@ Procedure FocoEnText()
            main.text_17.Setfocus // cPellFolder
 
       Case main.RadioGroup_6.Value = 4 .AND. main.Tab_1.Value = 4 // Visual
-           // main.Frame_6.Show
-           // main.Frame_7.Show
-
            main.Label_28.Show
            main.Button_41.Show
 
@@ -1696,56 +1798,48 @@ Procedure FocoEnText()
            main.text_27.Setfocus // cVisualFolder
 
       Case main.RadioGroup_6.Value = 1 .AND. main.RadioGroup_5.Value = 1 .AND. main.Tab_1.Value = 5 // MinGW - Harbour
-           main.Frame_9.Show
            main.Label_15.Show
            main.Button_15.Show
            main.text_14.Show     // cGuiHbMinGW
            main.text_14.Setfocus // cGuiHbMinGW
 
       Case main.RadioGroup_6.Value = 1 .AND. main.RadioGroup_5.Value = 2 .AND. main.Tab_1.Value = 5 // MinGW - xHarbour
-           main.Frame_10.Show
            main.Label_21.Show
            main.Button_29.Show
            main.text_19.Show     // cGuixHbMinGW
            main.text_19.Setfocus // cGuixHbMinGW
 
       Case main.RadioGroup_6.Value = 2 .AND. main.RadioGroup_5.Value = 1 .AND. main.Tab_1.Value = 5 // Borland - Harbour
-           main.Frame_9.Show
            main.Label_18.Show
            main.Button_18.Show
            main.text_23.Show     // cGuiHbBCC
            main.text_23.Setfocus // cGuiHbBCC
 
       Case main.RadioGroup_6.Value = 2 .AND. main.RadioGroup_5.Value = 2 .AND. main.Tab_1.Value = 5 // Borland - xHarbour
-           main.Frame_10.Show
            main.Label_22.Show
            main.Button_30.Show
            main.text_21.Show     // cGuixHbBCC
            main.text_21.Setfocus // cGuixHbBCC
 
       Case main.RadioGroup_6.Value = 3 .AND. main.RadioGroup_5.Value = 1 .AND. main.Tab_1.Value = 5  // Pelles - Harbour
-           main.Frame_9.Show
            main.Label_20.Show
            main.Button_28.Show
            main.text_18.Show     // cGuiHbPelles
            main.text_18.Setfocus // cGuiHbPelles
 
       Case main.RadioGroup_6.Value = 3 .AND. main.RadioGroup_5.Value = 2 .AND. main.Tab_1.Value = 5 // Pelles - xHarbour
-           main.Frame_10.Show
            main.Label_23.Show
            main.Button_31.Show
            main.text_22.Show     // cGuixHbPelles
            main.text_22.Setfocus // cGuixHbPelles
 
       Case main.RadioGroup_6.Value = 4 .AND. main.RadioGroup_5.Value = 1 .AND. main.Tab_1.Value = 5 // Visual - Harbour
-           main.Frame_9.Show
            main.Label_30.Show
            main.Button_42.Show
            main.text_29.Show     // cGuiHbVisual
            main.text_29.Setfocus // cGuiHbVisual
 
       Case main.RadioGroup_6.Value = 4 .AND. main.RadioGroup_5.Value = 2 .AND. main.Tab_1.Value = 5 // Visual - xHarbour
-           main.Frame_10.Show
            main.Label_31.Show
            main.Button_43.Show
            main.text_30.Show     // cGuixHbVisual
@@ -1786,11 +1880,6 @@ Procedure DisableText()
          main.Button_26.Hide
          main.Button_27.Hide
          main.Button_40.Hide
-
-         main.Frame_2.Hide
-         main.Frame_3.Hide
-         // main.Frame_37.Hide
-
 
          // Tab C Compiler
 
@@ -1833,9 +1922,6 @@ Procedure DisableText()
          main.Label_25.Hide
          main.Label_29.Hide
 
-         // main.Frame_6.Hide
-         // main.Frame_7.Hide
-
          // Tab GUI
 
          main.text_14.Hide // cGuiHbMinGW
@@ -1865,9 +1951,6 @@ Procedure DisableText()
          main.Button_30.Hide
          main.Button_31.Hide
          main.Button_43.Hide
-
-         main.Frame_9.Hide
-         main.Frame_10.Hide
 
 Return
 *---------------------------------------------------------------------*

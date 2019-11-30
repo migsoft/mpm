@@ -37,6 +37,8 @@ Procedure Build2Lib( ProjectName )  // Library MinGW
 
         EXEOUTPUTNAME := iif( empty(EXEOUTPUTNAME), 'lib'+GetName( Left( PRGFILES [1] , Len(PRGFILES [1] ) - 4 )+'.a' ) , 'lib'+EXEOUTPUTNAME+'.a' )
 
+        ExeName := EXEOUTPUTNAME
+
         // cCUserFlags := iif( empty(AllTrim(main.Text_12.Value)),'-Wall -mno-cygwin -O3',AllTrim(main.Text_12.Value) )
         cCUserFlags := iif( empty(AllTrim(main.Text_12.Value)),'-Wall -O3',AllTrim(main.Text_12.Value) )
         cUserFlags  := iif( empty(USERFLAGS),'',' '+USERFLAGS )
@@ -151,15 +153,6 @@ Procedure Build2Lib( ProjectName )  // Library MinGW
         CorreBuildBat()
 
     END SEQUENCE
-
-    QuitarEspera()
-
-    main.Tab_1.value := 7
-
-    If File(EXEOUTPUTNAME)
-        MsgInfo('Library File: '+ EXEOUTPUTNAME+' is OK',"Project Build")
-        Ferase('_Temp.log')
-    Endif
 
     Procesando(2)
 

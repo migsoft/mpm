@@ -54,6 +54,7 @@ Function GetCFiles()
         DEFINE WINDOW GetCFiles AT 0,0 WIDTH 533 HEIGHT 384 TITLE 'Select C Files' ;
            ICON "ampm" MODAL NOMINIMIZE NOMAXIMIZE NOSIZE BACKCOLOR {255,255,255}
 
+
          DEFINE FRAME Frame_21
             ROW    0
             COL    10

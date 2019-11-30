@@ -219,6 +219,7 @@ Procedure Build( ProjectName )  // Borland C
                  'End.Txt' + NewLi )
 
       Procesando(1)
+
       Processing  := .T.
 
       main.RichEdit_1.Value := ''
@@ -226,8 +227,6 @@ Procedure Build( ProjectName )  // Borland C
       CorreBuildBat()
 
       END SEQUENCE
-
-      QuitarEspera()
 
       EndBuild()
 

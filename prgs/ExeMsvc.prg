@@ -235,6 +235,7 @@ Procedure Build5(ProjectName) //(x)Harbour - Visual C
                   // '@ECHO OFF' + NewLi + 'call "%ProgramFiles%\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x86' + NewLi + ;
 
       Procesando(1)
+
       Processing := .T.
 
       main.RichEdit_1.Value := ''
@@ -242,8 +243,6 @@ Procedure Build5(ProjectName) //(x)Harbour - Visual C
       CorreBuildBat()
 
       END SEQUENCE
-
-      QuitarEspera()
 
       EndBuild()
 

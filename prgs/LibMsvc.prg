@@ -36,6 +36,8 @@ Procedure BuildLib5( ProjectName )  // Library Visual C
         cUserFlags     := iif( empty(USERFLAGS),'',USERFLAGS )
 
         EXEOUTPUTNAME := iif( empty(EXEOUTPUTNAME), GetName( Left( PRGFILES [1] , Len(PRGFILES [1] ) - 4 ) ) + '.lib' , EXEOUTPUTNAME+ '.lib' )
+        
+        ExeName := EXEOUTPUTNAME
 
         Out := Out + 'HARBOUR_EXE = '   + cHarbourFolder + '\BIN\HARBOUR.EXE'   + NewLi
         Out := Out + 'CC = '            + 'CL.EXE'       + NewLi
@@ -139,6 +141,7 @@ Procedure BuildLib5( ProjectName )  // Library Visual C
 //                  '@ECHO OFF' + NewLi + 'call "%ProgramFiles%\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x86' + NewLi + ;
 
         Procesando(1)
+        
         Processing := .t.
 
         main.RichEdit_1.Value := ''
@@ -146,14 +149,6 @@ Procedure BuildLib5( ProjectName )  // Library Visual C
         CorreBuildBat()
 
     END SEQUENCE
-
-    QuitarEspera()
-
-    main.Tab_1.value := 7
-
-    If File(EXEOUTPUTNAME)
-        MsgInfo('Library File: '+ EXEOUTPUTNAME+' is OK',"Project Build")
-    Endif
 
     Procesando(2)
 

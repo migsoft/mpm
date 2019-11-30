@@ -233,8 +233,6 @@ Procedure Build4(ProjectName) //(x)Harbour - Pelles C
 
       END SEQUENCE
 
-      QuitarEspera()
-
       EndBuild()
 
       Procesando(2)

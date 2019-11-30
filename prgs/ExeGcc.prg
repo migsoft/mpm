@@ -275,13 +275,11 @@ Procedure Build2( ProjectName )  // Executable MinGW
 
         CorreBuildBat()
 
-    END SEQUENCE
+     END SEQUENCE
 
-    QuitarEspera()
+     EndBuild()
 
-    EndBuild()
-
-    Procesando(2)
+     Procesando(2)
 
 Return
 
