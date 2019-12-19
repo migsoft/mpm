@@ -67,7 +67,7 @@ Procedure BuildLib5( ProjectName )  // Library Visual C
             cFile1 := Left ( PRGFILES [1] , Len(PRGFILES [1] ) - 2 )
         Endif
 
-        if ( main.List_1.ItemCount > 2 )
+        if ( main.List_1.ItemCount > 1 )
             cBarra := ' \'
         Else
             cBarra := ''

@@ -1,6 +1,16 @@
 //
 // $Id: Mpm.rc,v 1.1 2013/11/18 20:40:23 migsoft Exp $
-//
+//  echo | gcc -dM -E -
+
+
+#ifdef _MSC_VER
+#endif
+
+
+#ifndef __GNUC__
+1 24 Mpm.Manifest
+#endif
+
 
 ampm        ICON     res\Migproj.ico
 favicon     ICON     res\Migproj.ico
@@ -10,6 +20,7 @@ logop       JPG      res\ologop.jpg
 mnew        BITMAP   res\new.bmp
 mopen       BITMAP   res\open.bmp
 msave       BITMAP   res\save.bmp
+msave2      BITMAP   res\saveas.bmp
 mrun        BITMAP   res\run.bmp
 mbad        BITMAP   res\bad.bmp
 mexit       BITMAP   res\exit.bmp
@@ -35,6 +46,8 @@ tcompiler   BITMAP   res\t_compiler.bmp
 tgui        BITMAP   res\t_gui.bmp
 tlibraries  BITMAP   res\t_libraries.bmp
 tresult     BITMAP   res\t_result.bmp
+
+#ifdef __GNUC__
 
 1 VERSIONINFO
  FILEVERSION 3,0,0,0
@@ -63,3 +76,42 @@ BEGIN
         VALUE "Translation", 0x280a, 1200
     END
 END
+
+#endif
+
+
+#ifdef __BORLANDC__
+
+1 VERSIONINFO
+ FILEVERSION 3,0,0,0
+ PRODUCTVERSION 3,0,0,0
+ FILEFLAGSMASK 0x17L
+ FILEOS 0x4L
+ FILETYPE 0x2L
+ FILESUBTYPE 0x0L
+{
+    BLOCK "StringFileInfo"
+    {
+        BLOCK "280a04b0"
+        {
+            VALUE "CompanyName", "Miguel Angel Juárez Apaza"
+            VALUE "FileDescription", "MigSoft Project Manager"
+            VALUE "FileVersion", "3.0.0.0"
+            VALUE "InternalName", "MPM\000"
+            VALUE "LegalCopyright", "© 2005-2019 MigSoft\000"
+            VALUE "LegalTrademarks", "Harbour"
+            VALUE "OriginalFilename", "Mpm.exe"
+            VALUE "ProductName", " MPM Multi-GUI / Multi-Compiler\000"
+            VALUE "ProductVersion", "3.0.0.0"
+            VALUE "Comments", "Created by MigSoft <migsoft@oohg.org>\000"
+        }
+    }
+    BLOCK "VarFileInfo"
+    {
+        VALUE "Translation", 0x280a, 1200
+    }
+}
+
+#endif
+
+

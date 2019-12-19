@@ -12,7 +12,7 @@
 /*
  * ooHG - Object Oriented Harbour GUI library
  * https://oohg.github.io/ - https://migsoft.ml
- * "Mpm.prg" MigSoft Project Manager - Miguel Angel Ju√°rez Apaza
+ * "Mpm.prg" MigSoft Project Manager - Miguel Angel Ju·rez Apaza
  * Copyright 2008-2019 MigSoft <migsoft/at/oohg.org>
  */
 
@@ -134,6 +134,9 @@ Procedure Publicar
    public cPrgEditor     := 'notepad.exe'
    public cFCompress     := 'upx.exe'
    public cFmgEditor     := 'oide.exe'
+   public cDbfEditor     := 'dbview.exe'
+   public cMySQLView     := 'mysqlinfo.exe'
+
 
    public cGuiHbMinGW    := cDiskNew+'oohg'
    public cGuiHbBCC      := cDiskNew+'oohg'
@@ -465,7 +468,7 @@ Procedure ChangeDrvSource(cLine)
    Endif
 Return(cLine)
 *---------------------------------------------------------------------*
-Procedure OpenMPM( ProjectFile ) // Versi√≥n nueva de .mpm
+Procedure OpenMPM( ProjectFile ) // VersiÛn nueva de .mpm
 *---------------------------------------------------------------------*
 
    Local cDiskNew := Upper(Hb_CurDrive()) + ":\", c := ''
@@ -543,6 +546,7 @@ Procedure OpenMPM( ProjectFile ) // Versi√≥n nueva de .mpm
 
 
          If nTotSou > 0
+
             For i := 1 To nTotSou
                 DO EVENTS
                 GET  cFile   SECTION 'SOURCE'  ENTRY "SCRFILE"+AllTrim(Str(i))
@@ -827,13 +831,14 @@ Procedure BorraTemporales()
          Ferase(oPath +'\'+'b32.bc')
          Ferase(oPath +'\'+'p32.bc')
          Ferase(oPath +'\'+'p32.pc')
+         Ferase(oPath +'\'+'_Temp.bc')
       Endif
+      Ferase(oPath +'\'+'MCITEXT.dbf')
       Ferase(oPath +'\'+'End.txt')
       Ferase(oPath +'\'+'error.lst')
       Ferase(oPath +'\'+x3+'.res')
       Ferase(oPath +'\'+x3+'.map')
       Ferase(oPath +'\'+x3+'.tds')
-      Ferase(oPath +'\'+'_Temp.bc')
       Ferase(oPath +'\'+'_Temp.rc')
       Ferase(oPath +'\'+'_Temp.res')
       Ferase(oPath +'\'+'_Temp.o')
@@ -877,7 +882,6 @@ Procedure RunOutPut()
             Endif
             EXECUTE FILE PROJECTFOLDER +'\'+GetName(ExeName)
          Else
-            AutoMsgInfo( ExeName,GetName( ExeName ) )
             main.RichEdit_1.Setfocus
          Endif
   Endif
@@ -965,15 +969,26 @@ RETURN(NIL)
 
 Procedure OpcTools( nOpc )
 
-   main.tab_1.value := 5
-
    Do Case
       Case nOpc = 1  // Text Editor
+           main.tab_1.value := 5
            main.text_15.SetFocus
       Case nOpc = 2  // Form Editor
+           main.tab_1.value := 5
            main.text_31.SetFocus
       Case nOpc = 3  // Compress EXE
+           main.tab_1.value := 5
            main.text_28.SetFocus
+      Case nOpc = 4  // DBF Viewer
+           main.tab_1.value := 5
+           main.text_77.SetFocus
+      Case nOpc = 5  // MySQL Viewer
+           main.tab_1.value := 5
+           main.text_88.SetFocus
+      Case nOpc = 6  // PRG Reindent
+           Main2()
+      Case nOpc = 7  // WinSize
+           Main3()
    EndCase
 
 Return
@@ -1249,6 +1264,8 @@ Procedure AsignCtrl(nOpt)
       cPrgEditor     := main.text_15.Value
       cFCompress     := main.text_28.Value
       cFmgEditor     := main.text_31.Value
+      cDbfEditor     := main.text_77.Value
+      cMySQLView     := main.text_88.Value
 
       cGuiHbMinGW    := main.text_14.Value
       cGuiHbBCC      := main.text_23.Value
@@ -1278,6 +1295,8 @@ Procedure AsignCtrl(nOpt)
       main.text_15.Value := cPrgEditor
       main.text_28.Value := cFCompress
       main.text_31.Value := cFmgEditor
+      main.text_77.Value := cDbfEditor
+      main.text_88.Value := cMySQLView
 
       main.text_14.Value := cGuiHbMinGW
       main.text_23.Value := cGuiHbBCC
@@ -1321,6 +1340,8 @@ Procedure LoadEnvironment()
    GET cPrgEditor       SECTION 'TOOLS'    ENTRY "PRGEDITOR"     default 'notepad.exe'
    GET cFcompress       SECTION 'TOOLS'    ENTRY "FCOMPRESS"     default 'upx.exe'
    GET cFmgEditor       SECTION 'TOOLS'    ENTRY "FMGEDITOR"     default 'oide.exe'
+   GET cDbfEditor       SECTION 'TOOLS'    ENTRY "DBFEDITOR"     default 'dbview.exe'
+   GET cMySQLView       SECTION 'TOOLS'    ENTRY "MYSQLVIEW"     default 'MySQLInfo.exe'
 
    //****************** OOHG
    GET cGuiHbMinGW      SECTION 'GUILIB'   ENTRY "GUIHBMINGW"    default cDiskNew+'oohg'
@@ -1362,6 +1383,8 @@ Procedure SaveEnvironment()  // Guardaba variables en carpeta de mpm
          SET SECTION 'TOOLS'    ENTRY "PRGEDITOR"    TO main.text_15.value
          SET SECTION 'TOOLS'    ENTRY "FCOMPRESS"    TO main.text_28.value
          SET SECTION 'TOOLS'    ENTRY "FMGEDITOR"    TO main.text_31.value
+         SET SECTION 'TOOLS'    ENTRY "DBFEDITOR"    TO main.text_77.value
+         SET SECTION 'TOOLS'    ENTRY "MYSQLVIEW"    TO main.text_88.value
 
          SET SECTION 'GUILIB'   ENTRY "GUIHBMINGW"   TO main.text_14.value
          SET SECTION 'GUILIB'   ENTRY "GUIHBBCC"     TO main.text_23.value
@@ -1425,12 +1448,12 @@ Function Hblibs( cRuta,cHb,cCclr )
       aHb  := {'hbsix.lib', 'hbvm.lib', 'hbrdd.lib', 'hbmacro.lib', 'hbpp.lib', 'hbrtl.lib', 'hblang.lib', 'hbcommon.lib', 'rddntx.lib', 'rddcdx.lib', 'rddfpt.lib', 'hbct.lib', 'socket.lib', 'mysqldll.lib', 'dll.lib', 'hbcpage.lib', 'hbdebug.lib', 'hbhsx.lib', 'hbpcre.lib', 'hbmzip.lib', 'hbzlib.lib', 'hbwin.lib', 'xhb.lib', 'odbc32.lib', 'hbmisc.lib', 'hbnf.lib', 'hbmemio.lib','hbcplr.lib','hbziparc.lib','hbtip.lib' }
    Endif
 
-   aHba := {'libhbsix.a', 'libhbvm.a', 'libhbrdd.a', 'libhbmacro.a', 'libhbpp.a', 'libhbrtl.a', 'libhblang.a', 'libhbcommon.a', 'librddntx.a', 'librddcdx.a', 'librddfpt.a', 'libhbct.a', 'libsocket.a', 'libmysqldll.a', 'libdll.a', 'libhbcpage.a', 'libhbdebug.a', 'libhbhsx.a', 'libhbpcre.a', 'libhbmzip.a', 'libhbzlib.a', 'libhbwin.a', 'libxhb.a','libodbc32.a', 'libhbmisc.a', 'libhbnf.a', 'libhbmemio.a','libhbcplr.a','libhbziparc.a','libminizip.a','libhbtip.a','libnetio.a','libpng.a','liblibhpdf.a','libhbvpdf.a','libhbzebra.a','libhbhpdf.a','libhbpcre2.a ' }
-   aHba1:= {'lhbsix'    , 'lhbvm'    , 'lhbrdd'    , 'lhbmacro'    , 'lhbpp'    , 'lhbrtl'    , 'lhblang'    , 'lhbcommon'    , 'lrddntx'    , 'lrddcdx'    , 'lrddfpt'    , 'lhbct'    , 'lsocket'    , 'lmysqldll'    , 'ldll'    , 'lhbcpage'    , 'lhbdebug'    , 'lhbhsx'    , 'lhbpcre'    , 'lhbmzip'    , 'lhbzlib'    , 'lhbwin'    , 'lxhb'    , 'lodbc32'   , 'lhbmisc'    , 'lhbnf'    , 'lhbmemio'    ,'lhbcplr'    ,'lhbziparc'    ,'lminizip'    ,'lhbtip'    ,'lnetio'    ,'lpng'    ,'llibhpdf'    ,'lhbvpdf'    ,'lhbzebra'    ,'lhbhpdf'    ,'lhbpcre2 ' }
+   aHba := {'libhbsix.a', 'libhbvm.a', 'libhbrdd.a', 'libhbmacro.a', 'libhbpp.a', 'libhbrtl.a', 'libhblang.a', 'libhbcommon.a', 'librddntx.a', 'librddcdx.a', 'librddfpt.a', 'libhbct.a', 'libsocket.a', 'libmysqldll.a', 'libdll.a', 'libhbcpage.a', 'libhbdebug.a', 'libhbhsx.a', 'libhbpcre.a', 'libhbmzip.a', 'libhbzlib.a', 'libhbwin.a', 'libxhb.a','libodbc32.a', 'libhbmisc.a', 'libhbnf.a', 'libhbmemio.a','libhbcplr.a','libhbziparc.a','libminizip.a','libhbtip.a','libnetio.a','libpng.a','liblibhpdf.a','libhbvpdf.a','libhbzebra.a','libhbhpdf.a','libhbpcre2.a '}
+   aHba1:= {'lhbsix'    , 'lhbvm'    , 'lhbrdd'    , 'lhbmacro'    , 'lhbpp'    , 'lhbrtl'    , 'lhblang'    , 'lhbcommon'    , 'lrddntx'    , 'lrddcdx'    , 'lrddfpt'    , 'lhbct'    , 'lsocket'    , 'lmysqldll'    , 'ldll'    , 'lhbcpage'    , 'lhbdebug'    , 'lhbhsx'    , 'lhbpcre'    , 'lhbmzip'    , 'lhbzlib'    , 'lhbwin'    , 'lxhb'    , 'lodbc32'   , 'lhbmisc'    , 'lhbnf'    , 'lhbmemio'    ,'lhbcplr'    ,'lhbziparc'    ,'lminizip'    ,'lhbtip'    ,'lnetio'    ,'lpng'    ,'llibhpdf'    ,'lhbvpdf'    ,'lhbzebra'    ,'lhbhpdf'    ,'lhbpcre2 '    }
 
-   axHb := {'hbsix.lib', 'vm.lib'  , 'rdd.lib'  , 'macro.lib'  , 'pp.lib'  , 'rtl.lib'  , 'lang.lib'  , 'common.lib'  , 'nulsys.lib', 'dbfntx.lib', 'dbfcdx.lib', 'dbffpt.lib', 'ct.lib', 'libmisc.lib', 'hbodbc.lib', 'odbc32.lib', 'use_dll.lib', 'pcrepos.lib', 'codepage.lib', 'zlib.lib', 'tip.lib', 'rdds.lib' ,'dll.lib','socket.lib', 'rddads.lib', 'ace32.lib','debug.lib'}
-   axHba:= {'libgtwin.a','libhbsix.a', 'libvm.a', 'librdd.a', 'libmacro.a', 'libpp.a', 'librtl.a', 'liblang.a', 'libcommon.a', 'libnulsys.a', 'libdbfntx.a', 'libdbfcdx.a', 'libdbffpt.a', 'libct.a', 'liblibmisc.a', 'libhbodbc.a', 'libodbc32.a', 'libuse_dll.a', 'libpcrepos.a', 'libcodepage.a', 'libzlib.a', 'libtip.a', 'librdds.a','libdll.a','libsocket.a' }
-   axHba1:= {'lgtwin','lhbsix', 'lvm', 'lrdd', 'lmacro', 'lpp', 'lrtl', 'llang', 'lcommon', 'lnulsys', 'ldbfntx', 'ldbfcdx', 'ldbffpt', 'lct', 'llibmisc', 'lhbodbc', 'lodbc32', 'luse_dll', 'lpcrepos', 'lcodepage', 'lzlib', 'ltip', 'lrdds', 'ldll', 'lsocket' }
+   axHb := {'hbsix.lib', 'vm.lib'  , 'rdd.lib'  , 'macro.lib'  , 'pp.lib'  , 'rtl.lib'  , 'lang.lib'  , 'common.lib'  , 'nulsys.lib', 'dbfntx.lib', 'dbfcdx.lib', 'dbffpt.lib', 'ct.lib', 'libmisc.lib', 'hbodbc.lib', 'odbc32.lib', 'use_dll.lib', 'pcrepos.lib', 'codepage.lib', 'zlib.lib', 'tip.lib', 'rdds.lib' ,'dll.lib','socket.lib', 'rddads.lib', 'ace32.lib','debug.lib' ,'vmmt.lib'}
+   axHba:= {'libgtwin.a','libhbsix.a', 'libvm.a', 'librdd.a', 'libmacro.a', 'libpp.a', 'librtl.a', 'liblang.a', 'libcommon.a', 'libnulsys.a', 'libdbfntx.a', 'libdbfcdx.a', 'libdbffpt.a', 'libct.a', 'liblibmisc.a', 'libhbodbc.a', 'libodbc32.a', 'libuse_dll.a', 'libpcrepos.a', 'libcodepage.a', 'libzlib.a', 'libtip.a', 'librdds.a','libdll.a','libsocket.a','libvmmt.a' }
+   axHba1:= {'lgtwin','lhbsix', 'lvm', 'lrdd', 'lmacro', 'lpp', 'lrtl', 'llang', 'lcommon', 'lnulsys', 'ldbfntx', 'ldbfcdx', 'ldbffpt', 'lct', 'llibmisc', 'lhbodbc', 'lodbc32', 'luse_dll', 'lpcrepos', 'lcodepage', 'lzlib', 'ltip', 'lrdds', 'ldll', 'lsocket','lvmmt' }
 
    Do case
       case cHb == 1 .and. cCclr == 1  // Harbour - MinGW

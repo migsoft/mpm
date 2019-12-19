@@ -38,13 +38,14 @@ Procedure BuildLib( ProjectName )  // Borland C
         Out := Out + 'ILINK_EXE = ' + BCCFOLDER + If ( Right ( BCCFOLDER , 1 ) != '\' , '\' , '' ) + 'BIN\ILINK32.EXE'  + NewLi
         Out := Out + 'BRC_EXE = ' + BCCFOLDER + If ( Right ( BCCFOLDER , 1 ) != '\' , '\' , '' ) + 'BIN\BRC32.EXE'  + NewLi
         Out := Out + 'APP_NAME = ' + EXEOUTPUTNAME                         + NewLi
-        Out := Out + 'RC_FILE = ' + MINIGUIFOLDER + If ( Right ( MINIGUIFOLDER , 1 ) != '\' , '\' , '' ) + 'RESOURCES\oohg.RC'  + NewLi
         Out := Out + 'INCLUDE_DIR = ' + HARBOURFOLDER+'\INCLUDE -I'+MINIGUIFOLDER+'\INCLUDE -I'+BCCFOLDER+'\INCLUDE -I'+PROJECTFOLDER + NewLi
         Out := Out + 'CC_LIB_DIR = ' + BCCFOLDER+'\LIB -L'+HARBOURFOLDER+'\LIB -L'+HARBOURFOLDER+'\LIB\WIN\BCC -L'+MINIGUIFOLDER+'\LIB -L'+PROJECTFOLDER + NewLi
         Out := Out + 'HRB_LIB_DIR = ' + HARBOURFOLDER + If ( Right ( HARBOURFOLDER , 1 ) != '\' , '\' , '' ) + 'LIB'  + NewLi
         Out := Out + 'USR_LIB_DIR = ' + LIBFOLDER + NewLi
-        Out := Out + 'OBJ_DIR = ' + PROJECTFOLDER + cOBJ_DIR  + NewLi
-        Out := Out + 'C_DIR = ' + PROJECTFOLDER + cOBJ_DIR  + NewLi
+//        Out := Out + 'OBJ_DIR = ' + PROJECTFOLDER + cOBJ_DIR  + NewLi
+        Out := Out + 'OBJ_DIR = .' + cOBJ_DIR  + NewLi
+//        Out := Out + 'C_DIR = ' + PROJECTFOLDER + cOBJ_DIR  + NewLi
+        Out := Out + 'C_DIR = .' + cOBJ_DIR  + NewLi
         Out := Out + 'TLIB = '+BCCFOLDER+'\BIN\TLIB.EXE'+crlf
         Out := Out + 'USER_FLAGS = ' + NewLi
 
@@ -63,13 +64,17 @@ Procedure BuildLib( ProjectName )  // Borland C
             cFile1 := Left ( PRGFILES [1] , Len(PRGFILES [1] ) - 2 )
         Endif
 
-        if ( main.List_1.ItemCount > 2 )
+        if ( main.List_1.ItemCount > 1 )
             cBarra := ' \'
         Else
             cBarra := ''
         Endif
 
-        Out := Out + '$(APP_NAME) :	$(OBJ_DIR)\' + GetName(Left ( PRGFILES [1] , Len(PRGFILES [1] ) - 4 )) + '.obj'+ cBarra + NewLi
+        If upper(Right( PRGFILES [1] , 1 )) = 'C'
+           Out := Out + '$(APP_NAME) :	$(OBJ_DIR)\' + GetName(Left ( PRGFILES [1] , Len(PRGFILES [1] ) - 2 )) + '.obj'+ cBarra + NewLi
+        Else
+           Out := Out + '$(APP_NAME) :	$(OBJ_DIR)\' + GetName(Left ( PRGFILES [1] , Len(PRGFILES [1] ) - 4 )) + '.obj'+ cBarra + NewLi
+        Endif
 
        nTotFmgs := 0
 
@@ -86,13 +91,13 @@ Procedure BuildLib( ProjectName )  // Borland C
                 IF i == Len ( PrgFiles ) - nTotFmgs
                     Out += '	$(OBJ_DIR)\' + GetName(Left ( PRGFILES [i] , Len( PRGFILES [i] ) - 4 ))  + '.obj' + NewLi
                 ELSE
-                    Out += '	$(OBJ_DIR)\' + GetName(Left ( PRGFILES [i] , Len( PRGFILES [i] ) - 4 ))  + '.obj \' + NewLi
+                       Out += '	$(OBJ_DIR)\' + GetName(Left ( PRGFILES [i] , Len( PRGFILES [i] ) - 4 ))  + '.obj \' + NewLi
                 ENDIF
             ElseIf upper(Right( PRGFILES [i] , 1 )) = 'C'
                 IF i == Len ( PrgFiles ) - nTotFmgs
                     Out += '	$(OBJ_DIR)\' + GetName(Left ( PRGFILES [i] , Len( PRGFILES [i] ) - 2 ))  + '.obj' + NewLi
                 ELSE
-                    Out += '	$(OBJ_DIR)\' + GetName(Left ( PRGFILES [i] , Len( PRGFILES [i] ) - 2 ))  + '.obj \' + NewLi
+                       Out += '	$(OBJ_DIR)\' + GetName(Left ( PRGFILES [i] , Len( PRGFILES [i] ) - 2 ))  + '.obj \' + NewLi
                 ENDIF
             Endif
         Next i
@@ -114,7 +119,9 @@ Procedure BuildLib( ProjectName )  // Borland C
 
         Out := Out + ' > b32.bc' + NewLi
 
-        Out := Out + '	$(TLIB) $@ /P32 @b32.bc ' + NewLi
+//        Out := Out + '	$(TLIB) $@ /P32 @b32.bc ' + NewLi
+        Out := Out + '	$(TLIB) $@ /P128 @b32.bc ' + NewLi
+
 
         For i := 1 To Len ( PrgFiles ) - nTotFmgs
             DO EVENTS

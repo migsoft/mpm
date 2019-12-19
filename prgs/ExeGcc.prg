@@ -87,9 +87,17 @@ Procedure Build2( ProjectName )  // Executable MinGW
             Out := Out + 'CFLAGS = -Wall -O3' +NewLi
 
         Else
-           // Out := Out + 'CFLAGS = -Wall -mwindows -mno-cygwin -O3 -Wl,--allow-multiple-definition '+USERCFLAGS+NewLi
-            Out := Out + 'CFLAGS = -Wall -mwindows -O3 -Wl,--allow-multiple-definition '+USERCFLAGS+NewLi
-         // Out := Out + 'CFLAGS = -Wall -mwindows -mno-cygwin -O3 ' +NewLi
+            // Out := Out + 'CFLAGS = -Wall -mwindows -mno-cygwin -O3 -Wl,--allow-multiple-definition '+USERCFLAGS+NewLi
+            // Out := Out + 'CFLAGS = -Wall -mwindows -O3 -Wl,--allow-multiple-definition '+USERCFLAGS+NewLi
+            // Out := Out + 'CFLAGS = -Wall -mwindows -mno-cygwin -O3 ' +NewLi
+
+            If WATHGUI = 3
+                HMGFLAGS := ' -pthread -static -lpthread '
+                Out := Out + 'CFLAGS = -Wall -mwindows -O3 -Wl,--allow-multiple-definition '+HMGFLAGS+USERCFLAGS+NewLi
+            Else
+                Out := Out + 'CFLAGS = -Wall -mwindows -O3 -Wl,--allow-multiple-definition '+USERCFLAGS+NewLi
+            Endif
+
         Endif
 
         Out := Out + NewLi
@@ -181,7 +189,7 @@ Procedure Build2( ProjectName )  // Executable MinGW
 
         Out := Out +'-L$(MINGW)/lib '+cLibFolder+cRutaLibs+' -L. -Wl,--start-group '
 
-        cHMGLibs1  :=' -lhmg '+cLibsUser
+        cHMGLibs1  :=' -lhmg -lhbvmmt'+cLibsUser
         cHMGLibs2  :=' -lgraph -ledit -lreport -lini -leditex -lcrypt -lhfcl'
 
         cMGELibs1  :=' -lminigui -lhbprinter -lminiprint '+cLibsUser

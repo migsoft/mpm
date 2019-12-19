@@ -63,7 +63,7 @@ Procedure BuildLib4( ProjectName )  // Library Pelles C
 
         cFile1 := Left ( PRGFILES [1] , Len(PRGFILES [1] ) - 4 )
 
-        if ( main.List_1.ItemCount > 2 )
+        if ( main.List_1.ItemCount > 1 )
             cBarra := ' \'
         Else
             cBarra := ''

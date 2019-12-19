@@ -15,6 +15,20 @@
 
    DECLARE WINDOW main
 
+Procedure GoViewer(nOpc)
+Local Editor
+
+    Do Case
+       Case nOpc = 1
+            Editor := AllTrim( main.Text_77.Value )
+            EXECUTE FILE Editor
+       Case nOpc = 2
+            Editor := AllTrim( main.Text_88.Value )
+            EXECUTE FILE Editor 
+    End Case
+
+Return
+
 Procedure CPUArch()
     If !IsOS64()
        main.check_64.value := .F.
@@ -400,10 +414,6 @@ return nRetVal
 
 #define _WIN32_IE 0x0500
 #define HB_OS_WIN_USED
-// #define _WIN32_WINNT 0x0400
-
-#define WS_EX_LAYERED 0x80000
-#define LWA_ALPHA 0x02
 
 #include <windows.h>
 #include "hbapi.h"

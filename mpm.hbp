@@ -1,6 +1,8 @@
 #
-# $Id: mpm.hbp,v 1.1 2013/11/18 20:40:24 migsoft Exp $
+# $Id: mpm.hbp,v 2.0 2019/12/05 17:17:15 migsoft Exp $
 #
+
+#-ldflag=-Wl,--allow-multiple-definition
 
 -ifmgs
 
@@ -22,3 +24,5 @@ prgs\MpmAso.prg
 prgs\MpmCommon.prg
 prgs\PrgFilesAdd.prg
 prgs\RcFilesAdd.prg
+prgs\indent.prg
+prgs\winsize.prg

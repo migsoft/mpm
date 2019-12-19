@@ -41,7 +41,7 @@ Procedure Build( ProjectName )  // Borland C
       Out := Out + 'ILINK_EXE = ' + BCCFOLDER + If ( Right ( BCCFOLDER , 1 ) != '\' , '\' , '' ) + 'BIN\ILINK32.EXE'  + NewLi
       Out := Out + 'BRC_EXE = ' + BCCFOLDER + If ( Right ( BCCFOLDER , 1 ) != '\' , '\' , '' ) + 'BIN\BRC32.EXE'  + NewLi
       Out := Out + 'APP_NAME = ' +iif(empty(EXEOUTPUTNAME), GetName(Left ( PRGFILES [1] , Len(PRGFILES [1] ) - 4 ) + '.Exe') + NewLi, EXEOUTPUTNAME+ '.Exe' + NewLi )
-      Out := Out + 'RC_FILE = ' + MINIGUIFOLDER + If ( Right ( MINIGUIFOLDER , 1 ) != '\' , '\' , '' ) + 'RESOURCES\oohg.RC'  + NewLi
+      Out := Out + 'RC_FILE = ' + MINIGUIFOLDER + If ( Right ( MINIGUIFOLDER , 1 ) != '\' , '\' , '' ) + 'RESOURCES\oohg_bcc.RC'  + NewLi
       Out := Out + 'INCLUDE_DIR = ' + HARBOURFOLDER+'\INCLUDE -I'+INCFOLDER+MINIGUIFOLDER+'\INCLUDE -I'+BCCFOLDER+'\INCLUDE -I'+PROJECTFOLDER + NewLi
       Out := Out + 'CC_LIB_DIR = ' + BCCFOLDER+'\LIB -L'+HARBOURFOLDER+'\LIB -L'+HARBOURFOLDER+'\LIB\WIN\BCC -L'+MINIGUIFOLDER+'\LIB -L'+MINIGUIFOLDER+'\LIB\hb\bcc -L'+MINIGUIFOLDER+'\HARBOUR\LIB -L'+PROJECTFOLDER + NewLi
 
@@ -170,8 +170,25 @@ Procedure Build( ProjectName )  // Borland C
 
       Out := Out + '	echo '+BCCFOLDER+'\LIB\cw32.lib + >> b32.bc' + NewLi
       Out := Out + '	echo '+BCCFOLDER+'\LIB\import32.lib + >> b32.bc' + NewLi
-      Out := Out + '	echo '+BCCFOLDER+'\LIB\PSDK\msimg32.lib, >> b32.bc' + NewLi
+      Out := Out + '	echo '+BCCFOLDER+'\LIB\cw32mt.lib + >> b32.bc' + NewLi
+      Out := Out + '	echo '+BCCFOLDER+'\LIB\uuid.lib + >> b32.bc' + NewLi
 
+      Out := Out + '	echo '+BCCFOLDER+'\LIB\PSDK\comctl32.lib + >> b32.bc' + NewLi
+      Out := Out + '	echo '+BCCFOLDER+'\LIB\PSDK\gdi32.lib + >> b32.bc' + NewLi
+      Out := Out + '	echo '+BCCFOLDER+'\LIB\PSDK\user32.lib + >> b32.bc' + NewLi
+      Out := Out + '	echo '+BCCFOLDER+'\LIB\PSDK\winspool.lib + >> b32.bc' + NewLi
+      Out := Out + '	echo '+BCCFOLDER+'\LIB\PSDK\comdlg32.lib + >> b32.bc' + NewLi
+      Out := Out + '	echo '+BCCFOLDER+'\LIB\PSDK\ole32.lib + >> b32.bc' + NewLi
+      Out := Out + '	echo '+BCCFOLDER+'\LIB\PSDK\shell32.lib + >> b32.bc' + NewLi
+      Out := Out + '	echo '+BCCFOLDER+'\LIB\PSDK\iphlpapi.lib + >> b32.bc' + NewLi
+      Out := Out + '	echo '+BCCFOLDER+'\LIB\PSDK\mapi32.lib + >> b32.bc' + NewLi
+      Out := Out + '	echo '+BCCFOLDER+'\LIB\PSDK\mpr.lib + >> b32.bc' + NewLi
+      Out := Out + '	echo '+BCCFOLDER+'\LIB\PSDK\msimg32.lib + >> b32.bc' + NewLi
+      Out := Out + '	echo '+BCCFOLDER+'\LIB\PSDK\oleaut32.lib + >> b32.bc' + NewLi
+      Out := Out + '	echo '+BCCFOLDER+'\LIB\PSDK\vfw32.lib + >> b32.bc' + NewLi
+      Out := Out + '	echo '+BCCFOLDER+'\LIB\PSDK\winmm.lib + >> b32.bc' + NewLi
+      Out := Out + '	echo '+BCCFOLDER+'\LIB\PSDK\ws2_32.lib + >> b32.bc' + NewLi
+      Out := Out + '	echo '+BCCFOLDER+'\LIB\PSDK\wsock32.lib, >> b32.bc' + NewLi
 
       If WATHGUI = 4
          Out += '	echo _temp.res >> b32.bc' + NewLi
