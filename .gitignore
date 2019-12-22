@@ -2,8 +2,13 @@
 compres.bat
 xhbcc.bat
 resul.txt
+End.txt
 *.exe
 *.ini
+*.bat
+*.gcc
+*.bc
+*.log
 /vOBJh
 /vOBJx
 /bOBJh

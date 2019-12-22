@@ -177,20 +177,20 @@ Procedure Build5(ProjectName) //(x)Harbour - Visual C
           Out += '	echo ' + Left ( LIBFILES [i] , Len(LIBFILES [i] ) - 4 ) + '.lib >> b32.bc' + NewLi
       Next i
 
-    Out += '	echo user32.lib >> b32.bc' + NewLi
-    Out += '	echo ws2_32.lib >> b32.bc' + NewLi
-    Out += '	echo winspool.lib >> b32.bc' + NewLi
-    Out += '	echo ole32.lib >> b32.bc' + NewLi
-    Out += '	echo oleaut32.lib >> b32.bc' + NewLi
-    Out += '	echo advapi32.lib >> b32.bc' + NewLi
-    Out += '	echo winmm.lib >> b32.bc' + NewLi
-    Out += '	echo mpr.lib >> b32.bc' + NewLi
-    Out += '	echo shell32.lib >> b32.bc' + NewLi
-    Out += '	echo gdi32.lib >> b32.bc' + NewLi
-    Out += '	echo msimg32.lib >> b32.bc' + NewLi
-    Out += '	echo comctl32.lib >> b32.bc' + NewLi
-    Out += '	echo comdlg32.lib >> b32.bc' + NewLi
-    Out += '	echo wsock32.lib >> b32.bc' + NewLi
+    Out += '	echo $(CC_LIB_DIR)\user32.lib >> b32.bc' + NewLi
+    Out += '	echo $(CC_LIB_DIR)\ws2_32.lib >> b32.bc' + NewLi
+    Out += '	echo $(CC_LIB_DIR)\winspool.lib >> b32.bc' + NewLi
+    Out += '	echo $(CC_LIB_DIR)\ole32.lib >> b32.bc' + NewLi
+    Out += '	echo $(CC_LIB_DIR)\oleaut32.lib >> b32.bc' + NewLi
+    Out += '	echo $(CC_LIB_DIR)\advapi32.lib >> b32.bc' + NewLi
+    Out += '	echo $(CC_LIB_DIR)\winmm.lib >> b32.bc' + NewLi
+    Out += '	echo $(CC_LIB_DIR)\mpr.lib >> b32.bc' + NewLi
+    Out += '	echo $(CC_LIB_DIR)\shell32.lib >> b32.bc' + NewLi
+    Out += '	echo $(CC_LIB_DIR)\gdi32.lib >> b32.bc' + NewLi
+    Out += '	echo $(CC_LIB_DIR)\msimg32.lib >> b32.bc' + NewLi
+    Out += '	echo $(CC_LIB_DIR)\comctl32.lib >> b32.bc' + NewLi
+    Out += '	echo $(CC_LIB_DIR)\comdlg32.lib >> b32.bc' + NewLi
+    Out += '	echo $(CC_LIB_DIR)\wsock32.lib >> b32.bc' + NewLi
 
     If WATHGUI = 4
        Out += '	echo _temp.res >> b32.bc' + NewLi
