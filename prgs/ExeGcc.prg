@@ -5,13 +5,6 @@
 #include "oohg.ch"
 #include "mpm.ch"
 
-#ifndef __HARBOUR__
-   #xtranslate hb_MemoWrit(<a>,<b>) => Memowrit(<a>,<b>,.N.)
-#else
-   #xtranslate MemoWrit(<a>,<b>,<c>) => hb_MemoWrit(<a>,<b>)
-#endif
-
-
 *---------------------------------------------------------------------*
 Procedure Build2( ProjectName )  // Executable MinGW
 *---------------------------------------------------------------------*

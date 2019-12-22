@@ -7,7 +7,13 @@
 #define NewLi         Hb_OSNewLine()
 #define cBackS        Hb_OsPathSeparator()
 
-//#xtranslate Hb_CurDrive() => Curdrive()
+#ifndef __HARBOUR__
+   #xtranslate hb_MemoWrit(<a>,<b>) => Memowrit(<a>,<b>,.N.)
+   #xtranslate Hb_CurDrive() => Curdrive()
+#else
+   #xtranslate MemoWrit(<a>,<b>,<c>) => hb_MemoWrit(<a>,<b>)
+   #xtranslate CurDrive() => Hb_Curdrive()
+#endif
 
 #define MPM_OOHG      1
 #define MPM_MINIGUI   2

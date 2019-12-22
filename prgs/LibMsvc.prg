@@ -138,10 +138,8 @@ Procedure BuildLib5( ProjectName )  // Library Visual C
                   '@ECHO OFF' + NewLi + 'call '+AddQuote( BCCFOLDER ) +'\vcvarsall.bat x86' + NewLi + ;
                    MakeName + ' ' + ParamString + NewLi + 'Echo End > ' + PROJECTFOLDER + If ( Right ( PROJECTFOLDER , 1 ) != '\' , '\' , '' ) + 'End.Txt' + NewLi )
 
-//                  '@ECHO OFF' + NewLi + 'call "%ProgramFiles%\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x86' + NewLi + ;
-
         Procesando(1)
-        
+
         Processing := .t.
 
         main.RichEdit_1.Value := ''
@@ -149,6 +147,8 @@ Procedure BuildLib5( ProjectName )  // Library Visual C
         CorreBuildBat()
 
     END SEQUENCE
+
+    EndBuild()
 
     Procesando(2)
 

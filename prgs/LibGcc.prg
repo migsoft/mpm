@@ -154,6 +154,8 @@ Procedure Build2Lib( ProjectName )  // Library MinGW
 
     END SEQUENCE
 
+    EndBuild()
+
     Procesando(2)
 
 Return

@@ -9,7 +9,6 @@
 Procedure Build( ProjectName )  // Borland C
 *---------------------------------------------------------------------*
 
-
    DECLARE WINDOW main
    DECLARE WINDOW MigMess
 
@@ -225,12 +224,12 @@ Procedure Build( ProjectName )  // Borland C
           Endif
       Next i
 
-      Memowrit ( PROJECTFOLDER + '\_Temp.Bc' , Out )
+      hb_Memowrit ( PROJECTFOLDER + '\_Temp.Bc' , Out )
 
       MakeName    := BCCFOLDER + '\BIN\MAKE.EXE'
       ParamString := '/f' + PROJECTFOLDER + '\_Temp.Bc' + ' 1>' + PROJECTFOLDER + '\_Temp.Log 2>&1'
 
-      Memowrit ( PROJECTFOLDER + If ( Right ( PROJECTFOLDER , 1 ) != '\' , '\' , '' ) + ;
+      hb_Memowrit ( PROJECTFOLDER + If ( Right ( PROJECTFOLDER , 1 ) != '\' , '\' , '' ) + ;
                 '_Build.Bat' , '@ECHO OFF' + NewLi + MakeName + ' ' + ParamString + ;
                  NewLi + 'Echo End > ' + PROJECTFOLDER + If ( Right ( PROJECTFOLDER , 1 ) != '\' , '\' , '' ) + ;
                  'End.Txt' + NewLi )
