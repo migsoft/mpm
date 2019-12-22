@@ -190,6 +190,13 @@ Procedure Build5(ProjectName) //(x)Harbour - Visual C
     Out += '	echo $(CC_LIB_DIR)\msimg32.lib >> b32.bc' + NewLi
     Out += '	echo $(CC_LIB_DIR)\comctl32.lib >> b32.bc' + NewLi
     Out += '	echo $(CC_LIB_DIR)\comdlg32.lib >> b32.bc' + NewLi
+    Out += '	echo $(CC_LIB_DIR)\libcmt.lib >> b32.bc' + NewLi
+    Out += '	echo $(CC_LIB_DIR)\oldnames.lib >> b32.bc' + NewLi
+    Out += '	echo $(CC_LIB_DIR)\Uuid.lib >> b32.bc' + NewLi
+    Out += '	echo $(CC_LIB_DIR)\libcpmt.lib >> b32.bc' + NewLi
+    Out += '	echo $(CC_LIB_DIR)\Kernel32.lib >> b32.bc' + NewLi
+    Out += '	echo $(CC_LIB_DIR)\libvcruntime.lib >> b32.bc' + NewLi
+    Out += '	echo $(CC_LIB_DIR)\libucrt.lib >> b32.bc' + NewLi
     Out += '	echo $(CC_LIB_DIR)\wsock32.lib >> b32.bc' + NewLi
 
     If WATHGUI = 4
@@ -231,8 +238,6 @@ Procedure Build5(ProjectName) //(x)Harbour - Visual C
     Hb_Memowrit ( PROJECTFOLDER + If ( Right ( PROJECTFOLDER , 1 ) != '\' , '\' , '' ) + '_Build.Bat' , ;
                   '@ECHO OFF' + NewLi + 'call '+AddQuote( BCCFOLDER +'\vcvarsall.bat')+' x86' + NewLi + ;
                        MakeName + ' ' + ParamString + NewLi + 'Echo End > ' + PROJECTFOLDER + If ( Right ( PROJECTFOLDER , 1 ) != '\' , '\' , '' ) + 'End.Txt' + NewLi )
-
-                  // '@ECHO OFF' + NewLi + 'call "%ProgramFiles%\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x86' + NewLi + ;
 
       Procesando(1)
 
