@@ -163,6 +163,8 @@ Procedure BuildLib( ProjectName )  // Borland C
 
     END SEQUENCE
 
+    EndBuild()
+
     Procesando(2)
 
 Return

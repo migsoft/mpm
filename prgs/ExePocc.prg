@@ -49,7 +49,7 @@ Procedure Build4(ProjectName) //(x)Harbour - Pelles C
    Out := Out + 'RC_FILE = '       + cMiniGuiFolder + '\RESOURCES\oohg.RC' + NewLi
    Out := Out + 'GUI_FOLDER = '    + cMiniGuiFolder                        + NewLi
    Out := Out + 'INCLUDE_DIR = '   + cHarbourFolder + '\INCLUDE /i' +cIncFolder+cMiniGuiFolder + '\INCLUDE /i' + cProjFolder +'/i' + cbccFolder + '\INCLUDE /i' + cBccFolder + '\INCLUDE\WIN'+ NewLi
-   Out := Out + 'CC_LIB_DIR = '    + cBccFolder     + '\LIB'               + NewLi
+   Out := Out + 'CC_LIB_DIR = '    + cBccFolder     + '\LIB -L'+ cBccFolder     +'LIB\WIN'     + NewLi
    Out := Out + 'INCLUDE_C_DIR = ' + cbccFolder     + '\INCLUDE -I' + cBccFolder + '\INCLUDE\WIN -I' + cHarbourFolder + '\INCLUDE -I' + cMiniGuiFolder + '\INCLUDE -I' + cProjFolder + NewLi
    Out := Out + 'USR_LIB_DIR = '   + cProjFolder                           + NewLi
    Out := Out + 'OBJ_DIR = '       + cProjFolder    + cOBJ_DIR             + NewLi
