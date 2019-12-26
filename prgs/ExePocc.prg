@@ -119,7 +119,6 @@ Procedure Build4(ProjectName) //(x)Harbour - Pelles C
     Endif
 
     FOR nFile := 1 To Len(PrgFiles) - nTotFmgs
-        DO EVENTS
         Out += '	echo $(OBJ_DIR)\' + GetName(DelExt(PrgFiles[nFile])) +  '.obj >' + IF(nFile > 1, '>', '') +' b32.bc ' + NewLi
     NEXT i
 
@@ -166,7 +165,6 @@ Procedure Build4(ProjectName) //(x)Harbour - Pelles C
     Endif
 
       For i := 1 To Len ( LIBFILES )
-          DO EVENTS
           Out += '	echo ' + Left ( LIBFILES [i] , Len(LIBFILES [i] ) - 4 ) + '.lib >> b32.bc' + NewLi
       Next i
 
@@ -198,7 +196,6 @@ Procedure Build4(ProjectName) //(x)Harbour - Pelles C
     Endif
 
     FOR nFile := 1 TO Len(PrgFiles) - nTotFmgs
-        DO EVENTS
         If upper(Right( PRGFILES [nFile] , 3 )) = 'PRG'
            Out += NewLi
            Out += '$(C_DIR)\' + GetName(DelExt(PrgFiles[nFile])) + '.c : ' + PrgFiles[nFile] + NewLi

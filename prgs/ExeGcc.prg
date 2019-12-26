@@ -109,14 +109,12 @@ Procedure Build2( ProjectName )  // Executable MinGW
         nTotFmgs := 0
 
         For i := 2 TO Len ( PrgFiles )
-            DO EVENTS
             If upper(Right( PRGFILES [i] , 3 )) = 'FMG'
                 nTotFmgs := nTotFmgs + 1
             Endif
         Next
 
         For i := 2 To Len ( PrgFiles) - nTotFmgs
-            DO EVENTS
             If upper(Right( PRGFILES [i] , 3 )) = 'PRG'
                 cfile := Left ( PRGFILES [i] , Len(PRGFILES [i] ) - 4 )
                 Out := Out + ' $(OBJ_DIR)/'+GetName(cfile)+'.o $(OBJ_DIR)/'+GetName(cfile)+'.c'
@@ -134,7 +132,6 @@ Procedure Build2( ProjectName )  // Executable MinGW
         Out := Out + GetName(cFile1)+'.exe  :'
 
         For i := 1 To Len ( PrgFiles) - nTotFmgs
-            DO EVENTS
             If upper(Right( PRGFILES [i] , 3 )) = 'PRG'
                 cfile := Left ( PRGFILES [i] , Len(PRGFILES [i] ) - 4 )
             ElseIf upper(Right( PRGFILES [i] , 1 )) = 'C'
@@ -149,7 +146,6 @@ Procedure Build2( ProjectName )  // Executable MinGW
         Out := Out + '	gcc $(CFLAGS) -o$(SOURCE).exe '
 
         For i := 1 To Len ( PrgFiles) - nTotFmgs
-            DO EVENTS
             If upper(Right( PRGFILES [i] , 3 )) = 'PRG'
                 cfile := Left ( PRGFILES [i] , Len(PRGFILES [i] ) - 4 )
             ElseIf upper(Right( PRGFILES [i] , 1 )) = 'C'
@@ -159,7 +155,6 @@ Procedure Build2( ProjectName )  // Executable MinGW
         NEXT I
 
         For i := 1 To Len ( LIBFILES)
-            DO EVENTS
             If UPPER(Right(LIBFILES [i],1))='A'
                 cFilea    := Left ( LIBFILES [i] , Len(LIBFILES [i] ) - 2 )
                 cLibsUser := cLibsUser + ' -l'+SubStr( GetName(cFilea),4,(Len(GetName(cFilea))-2) )
@@ -215,6 +210,7 @@ Procedure Build2( ProjectName )  // Executable MinGW
         Endif
 
         If WATHGUI = 1                        // ooHG
+            CreaGT(WITHGTMODE)
             Out := Out + cOohgLibs1 + cMinGWLibs + cHbLibs1
         Endif
         If WATHGUI = 2                         // MiniGUI
@@ -229,7 +225,6 @@ Procedure Build2( ProjectName )  // Executable MinGW
         Out := Out + NewLi
 
         For i := 1 To Len ( PrgFiles)  - nTotFmgs
-            DO EVENTS
             If upper(Right( PRGFILES [i] , 3 )) = 'PRG'
                 cfile := Left ( PRGFILES [i] , Len(PRGFILES [i] ) - 4 )
                 Out := Out +'$(OBJ_DIR)/'+GetName(cfile)+'.o    : $(OBJ_DIR)/'+GetName(cfile)+'.c'+NewLi
@@ -249,7 +244,6 @@ Procedure Build2( ProjectName )  // Executable MinGW
         Out := Out + NewLi
 
         For i := 1 To Len ( PrgFiles) - nTotFmgs
-            DO EVENTS
             If upper(Right( PRGFILES [i] , 3 )) = 'PRG'
                 cfile := Left ( PRGFILES [i] , Len(PRGFILES [i] ) - 4 )
                 Out := Out +'$(OBJ_DIR)/'+GetName(cfile)+'.c   : '+cfile+'.prg'+NewLi
@@ -288,7 +282,11 @@ Procedure CreaGT(nOpt)
     Local cDos,cDos2,cDos3
 
     If !File(MINIGUIFOLDER+"\include\respa.ch")
-      cDos3 := "/c copy /b "+MINIGUIFOLDER+"\include\minigui.ch "+MINIGUIFOLDER+"\include\respa.ch >NUL"
+      If WATHGUI = 1
+         cDos3 := "/c copy /b "+MINIGUIFOLDER+"\include\oohg.ch "+MINIGUIFOLDER+"\include\respa.ch >NUL"
+      Else
+         cDos3 := "/c copy /b "+MINIGUIFOLDER+"\include\minigui.ch "+MINIGUIFOLDER+"\include\respa.ch >NUL"
+      Endif
       EXECUTE FILE "CMD.EXE" PARAMETERS cDos3 HIDE
     Endif
 
@@ -302,7 +300,11 @@ Procedure CreaGT(nOpt)
 
     hb_Memowrit ( MINIGUIFOLDER+"\include\i_temp.ch" , "#include "+'"mpm_gt.ch"'+ NewLi )
 
-    cDos2 := "/c copy /b "+MINIGUIFOLDER+"\include\respa.ch+"+MINIGUIFOLDER+"\include\i_temp.ch "+MINIGUIFOLDER+"\include\minigui.ch >NUL"
+    If WATHGUI = 1
+       cDos2 := "/c copy /b "+MINIGUIFOLDER+"\include\respa.ch+"+MINIGUIFOLDER+"\include\i_temp.ch "+MINIGUIFOLDER+"\include\oohg.ch >NUL"
+    Else
+       cDos2 := "/c copy /b "+MINIGUIFOLDER+"\include\respa.ch+"+MINIGUIFOLDER+"\include\i_temp.ch "+MINIGUIFOLDER+"\include\minigui.ch >NUL"
+    Endif
 
     EXECUTE FILE "CMD.EXE" PARAMETERS cDos2 HIDE
 
