@@ -508,6 +508,7 @@ Procedure OpenMPM( ProjectFile ) // Versión nueva de .mpm
          GET main.check_1.value      SECTION 'PROJECT'    ENTRY "EXECOMPRESS"
          GET main.check_64.value     SECTION 'PROJECT'    ENTRY "EXE64BITS"
          GET main.check_bat.value    SECTION 'PROJECT'    ENTRY "DELETEBATCH"
+         GET main.check_MT.value     SECTION 'PROJECT'    ENTRY "MULTITHREAD"
 
          GET main.text_5.value       SECTION 'PROJECT'    ENTRY "OBJFOLDER"
              main.text_5.value := ChgPathToReal( main.text_5.value )
@@ -531,9 +532,10 @@ Procedure OpenMPM( ProjectFile ) // Versión nueva de .mpm
          GET main.text_43.value      SECTION 'FLAGSCLNK'  ENTRY "FLAGSTOLINKER3"  DEFAULT ''
          GET main.text_53.value      SECTION 'FLAGSCLNK'  ENTRY "FLAGSTOLINKER4"  DEFAULT ''
 
-         GET main.RadioGroup_5.value SECTION 'COMPILER'   ENTRY "HBCHOICE"        DEFAULT 1
-         GET main.RadioGroup_6.value SECTION 'COMPILER'   ENTRY "CCOMPILER"       DEFAULT 1
-         GET main.RadioGroup_7.value SECTION 'FILETYPE'   ENTRY "OUTPUTFILE"      DEFAULT 1
+         GET main.RadioGroup_5.value  SECTION 'COMPILER'   ENTRY "HBCHOICE"        DEFAULT 1
+         GET main.RadioGroup_6.value  SECTION 'COMPILER'   ENTRY "CCOMPILER"       DEFAULT 1
+         GET main.RadioGroup_15.value SECTION 'COMPILER'   ENTRY "BITSCCOMP"       DEFAULT 1
+         GET main.RadioGroup_7.value  SECTION 'FILETYPE'   ENTRY "OUTPUTFILE"      DEFAULT 1
 
          GET main.RadioGroup_3.value SECTION 'INTERFASE'  ENTRY "WITHGTMODE"      DEFAULT 1
          GET main.RadioGroup_2.value SECTION 'ENABDEBUG'  ENTRY "WITHDEBUG"       DEFAULT 1
@@ -1462,44 +1464,36 @@ Function Hblibs( cRuta,cHb,cCclr )
       cMT_hba1  := 'lhbvm'
    Endif
 
-   If File(cRuta+'\vm.lib')
-      aHb  := {'hbsix.lib', 'vm.lib'  , 'rdd.lib'  , 'macro.lib'  , 'pp.lib'  , 'rtl.lib'  , 'lang.lib'  , 'common.lib'  , 'nulsys.lib', 'dbfntx.lib', 'dbfcdx.lib', 'dbffpt.lib', 'ct.lib', 'libmisc.lib', 'hbodbc.lib', 'odbc32.lib', 'use_dll.lib', 'pcrepos.lib', 'codepage.lib', 'zlib.lib', 'tip.lib', 'rdds.lib' , 'rddads.lib', 'ace32.lib','debug.lib'}
-   Else
-      aHb  := {'hbsix.lib', 'hbvm.lib', 'hbrdd.lib', 'hbmacro.lib', 'hbpp.lib', 'hbrtl.lib', 'hblang.lib', 'hbcommon.lib', 'rddntx.lib', 'rddcdx.lib', 'rddfpt.lib', 'hbct.lib', 'socket.lib', 'mysqldll.lib', 'dll.lib', 'hbcpage.lib', 'hbdebug.lib', 'hbhsx.lib', 'hbpcre.lib', 'hbmzip.lib', 'hbzlib.lib', 'hbwin.lib', 'xhb.lib', 'odbc32.lib', 'hbmisc.lib', 'hbnf.lib', 'hbmemio.lib','hbcplr.lib','hbziparc.lib','hbtip.lib' }
-   Endif
+   aHb  := {'hbsix.lib', cMT_hb , 'hbrdd.lib', 'hbmacro.lib', 'hbpp.lib', 'hbrtl.lib', 'hblang.lib', 'hbcommon.lib', 'rddntx.lib', 'rddcdx.lib', 'rddfpt.lib', 'hbct.lib', 'socket.lib', 'mysqldll.lib', 'dll.lib', 'hbcpage.lib', 'hbdebug.lib', 'hbhsx.lib', 'hbpcre.lib', 'hbmzip.lib', 'hbzlib.lib', 'hbwin.lib', 'xhb.lib', 'odbc32.lib', 'hbmisc.lib', 'hbnf.lib', 'hbmemio.lib','hbcplr.lib','hbziparc.lib','hbtip.lib' }
 
-   aHba := {'libhbsix.a', 'libhbvm.a', 'libhbrdd.a', 'libhbmacro.a', 'libhbpp.a', 'libhbrtl.a', 'libhblang.a', 'libhbcommon.a', 'librddntx.a', 'librddcdx.a', 'librddfpt.a', 'libhbct.a', 'libsocket.a', 'libmysqldll.a', 'libdll.a', 'libhbcpage.a', 'libhbdebug.a', 'libhbhsx.a', 'libhbpcre.a', 'libhbmzip.a', 'libhbzlib.a', 'libhbwin.a', 'libxhb.a','libodbc32.a', 'libhbmisc.a', 'libhbnf.a', 'libhbmemio.a','libhbcplr.a','libhbziparc.a','libminizip.a','libhbtip.a','libnetio.a','libpng.a','liblibhpdf.a','libhbvpdf.a','libhbzebra.a','libhbhpdf.a','libhbpcre2.a '}
-   aHba1:= {'lhbsix'    , 'lhbvm'    , 'lhbrdd'    , 'lhbmacro'    , 'lhbpp'    , 'lhbrtl'    , 'lhblang'    , 'lhbcommon'    , 'lrddntx'    , 'lrddcdx'    , 'lrddfpt'    , 'lhbct'    , 'lsocket'    , 'lmysqldll'    , 'ldll'    , 'lhbcpage'    , 'lhbdebug'    , 'lhbhsx'    , 'lhbpcre'    , 'lhbmzip'    , 'lhbzlib'    , 'lhbwin'    , 'lxhb'    , 'lodbc32'   , 'lhbmisc'    , 'lhbnf'    , 'lhbmemio'    ,'lhbcplr'    ,'lhbziparc'    ,'lminizip'    ,'lhbtip'    ,'lnetio'    ,'lpng'    ,'llibhpdf'    ,'lhbvpdf'    ,'lhbzebra'    ,'lhbhpdf'    ,'lhbpcre2 '    }
+   aHba := {'libhbsix.a', cMT_Hba  , 'libhbrdd.a', 'libhbmacro.a', 'libhbpp.a', 'libhbrtl.a', 'libhblang.a', 'libhbcommon.a', 'librddntx.a', 'librddcdx.a', 'librddfpt.a', 'libhbct.a', 'libsocket.a', 'libmysqldll.a', 'libdll.a', 'libhbcpage.a', 'libhbdebug.a', 'libhbhsx.a', 'libhbpcre.a', 'libhbmzip.a', 'libhbzlib.a', 'libhbwin.a', 'libxhb.a','libodbc32.a', 'libhbmisc.a', 'libhbnf.a', 'libhbmemio.a','libhbcplr.a','libhbziparc.a','libminizip.a','libhbtip.a','libnetio.a','libpng.a','liblibhpdf.a','libhbvpdf.a','libhbzebra.a','libhbhpdf.a','libhbpcre2.a '}
+   aHba1:= {'lhbsix'    , cMT_Hba1 , 'lhbrdd'    , 'lhbmacro'    , 'lhbpp'    , 'lhbrtl'    , 'lhblang'    , 'lhbcommon'    , 'lrddntx'    , 'lrddcdx'    , 'lrddfpt'    , 'lhbct'    , 'lsocket'    , 'lmysqldll'    , 'ldll'    , 'lhbcpage'    , 'lhbdebug'    , 'lhbhsx'    , 'lhbpcre'    , 'lhbmzip'    , 'lhbzlib'    , 'lhbwin'    , 'lxhb'    , 'lodbc32'   , 'lhbmisc'    , 'lhbnf'    , 'lhbmemio'    ,'lhbcplr'    ,'lhbziparc'    ,'lminizip'    ,'lhbtip'    ,'lnetio'    ,'lpng'    ,'llibhpdf'    ,'lhbvpdf'    ,'lhbzebra'    ,'lhbhpdf'    ,'lhbpcre2 '    }
 
-   axHb := {'hbsix.lib', 'vm.lib'  , 'rdd.lib'  , 'macro.lib'  , 'pp.lib'  , 'rtl.lib'  , 'lang.lib'  , 'common.lib'  , 'nulsys.lib', 'dbfntx.lib', 'dbfcdx.lib', 'dbffpt.lib', 'ct.lib', 'libmisc.lib', 'hbodbc.lib', 'odbc32.lib', 'use_dll.lib', 'pcrepos.lib', 'codepage.lib', 'zlib.lib', 'tip.lib', 'rdds.lib' ,'dll.lib','socket.lib', 'rddads.lib', 'ace32.lib','debug.lib' }
-   axHba:= {'libgtwin.a','libhbsix.a', 'libvm.a', 'librdd.a', 'libmacro.a', 'libpp.a', 'librtl.a', 'liblang.a', 'libcommon.a', 'libnulsys.a', 'libdbfntx.a', 'libdbfcdx.a', 'libdbffpt.a', 'libct.a', 'liblibmisc.a', 'libhbodbc.a', 'libodbc32.a', 'libuse_dll.a', 'libpcrepos.a', 'libcodepage.a', 'libzlib.a', 'libtip.a', 'librdds.a','libdll.a','libsocket.a' }
-   axHba1:= {'lgtwin','lhbsix', 'lvm', 'lrdd', 'lmacro', 'lpp', 'lrtl', 'llang', 'lcommon', 'lnulsys', 'ldbfntx', 'ldbfcdx', 'ldbffpt', 'lct', 'llibmisc', 'lhbodbc', 'lodbc32', 'luse_dll', 'lpcrepos', 'lcodepage', 'lzlib', 'ltip', 'lrdds', 'ldll', 'lsocket' }
+   axHb := {'hbsix.lib', cMT_xHb   , 'rdd.lib'  , 'macro.lib'  , 'pp.lib'  , 'rtl.lib'  , 'lang.lib'  , 'common.lib'  , 'nulsys.lib', 'dbfntx.lib', 'dbfcdx.lib', 'dbffpt.lib', 'ct.lib', 'libmisc.lib', 'hbodbc.lib', 'odbc32.lib', 'use_dll.lib', 'pcrepos.lib', 'codepage.lib', 'zlib.lib', 'tip.lib', 'rdds.lib' ,'dll.lib','socket.lib', 'rddads.lib', 'ace32.lib','debug.lib' }
+   axHba:= {'libgtwin.a','libhbsix.a', cMT_xHba, 'librdd.a', 'libmacro.a', 'libpp.a', 'librtl.a', 'liblang.a', 'libcommon.a', 'libnulsys.a', 'libdbfntx.a', 'libdbfcdx.a', 'libdbffpt.a', 'libct.a', 'liblibmisc.a', 'libhbodbc.a', 'libodbc32.a', 'libuse_dll.a', 'libpcrepos.a', 'libcodepage.a', 'libzlib.a', 'libtip.a', 'librdds.a','libdll.a','libsocket.a' }
+   axHba1:= {'lgtwin','lhbsix', cMT_xHba1 , 'lrdd', 'lmacro', 'lpp', 'lrtl', 'llang', 'lcommon', 'lnulsys', 'ldbfntx', 'ldbfcdx', 'ldbffpt', 'lct', 'llibmisc', 'lhbodbc', 'lodbc32', 'luse_dll', 'lpcrepos', 'lcodepage', 'lzlib', 'ltip', 'lrdds', 'ldll', 'lsocket' }
 
    Do case
       case cHb == 1 .and. cCclr == 1  // Harbour - MinGW
            For n = 1 to Len(aHba)
-               DO EVENTS
                If File(cRuta+'\'+aHba[n])
                   cHbLibs := cHbLibs + '-' + aHba1[n] + ' '
                Endif
            Next
       case cHb == 1 .and. cCclr == 2 // Harbour - Borland
            For n = 1 to Len(aHb)
-               DO EVENTS
                If File(cRuta+'\'+aHb[n])
                   cHbLibs := cHbLibs + '	echo $(HRB_LIB_DIR)\' + aHb[n] + ' + >> b32.bc' + NewLi
                Endif
            Next
       case cHb == 1 .and. cCclr == 3 // Harbour - Pelles
            For n = 1 to Len(aHb)
-               DO EVENTS
                If File(cRuta+'\'+aHb[n])
                   cHbLibs = cHbLibs + '	echo $(HRB_LIB_DIR)\' + aHb[n] + ' >> b32.bc' + NewLi
                Endif
            Next
       case cHb == 1 .and. cCclr == 4 // Harbour - MS Visual
            For n = 1 to Len(aHb)
-               DO EVENTS
                If File(cRuta+'\'+aHb[n])
                   cHbLibs = cHbLibs + '	echo $(HRB_LIB_DIR)\' + aHb[n] + ' >> b32.bc' + NewLi
                Endif
@@ -1507,14 +1501,12 @@ Function Hblibs( cRuta,cHb,cCclr )
 
       case cHb == 2 .and. cCclr == 1 // xHarbour - MinGW
            For n = 1 to Len(axHba)
-               DO EVENTS
                If File(cRuta+'\'+axHba[n])
                   cHbLibs = cHbLibs + '-' + axHba1[n] + ' '
                Endif
            Next
       case cHb == 2 .and. cCclr == 2 // xHarbour - Borland
            For n = 1 to Len(axHb)
-               DO EVENTS
                If File(cRuta+'\'+axHb[n])
                   cHbLibs := cHbLibs + '	echo $(HRB_LIB_DIR)\' + axHb[n] + ' + >> b32.bc' + NewLi
                Endif
@@ -1522,14 +1514,12 @@ Function Hblibs( cRuta,cHb,cCclr )
 
       case cHb == 2 .and. cCclr == 3 // xHarbour - Pelles
            For n = 1 to Len(axHb)
-               DO EVENTS
                If File(cRuta+'\'+axHb[n])
                   cHbLibs = cHbLibs + '	echo $(HRB_LIB_DIR)\' + axHb[n] + ' >> b32.bc' + NewLi
                Endif
            Next
       case cHb == 2 .and. cCclr == 4 // xHarbour - MS Visual
            For n = 1 to Len(axHb)
-               DO EVENTS
                If File(cRuta+'\'+axHb[n])
                   cHbLibs = cHbLibs + '	echo $(HRB_LIB_DIR)\' + axHb[n] + ' >> b32.bc' + NewLi
                Endif
@@ -1538,6 +1528,7 @@ Function Hblibs( cRuta,cHb,cCclr )
    End case
 
 Return(cHblibs)
+
 *---------------------------------------------------------------------*
 Function Auto_GUI(cRuta)
 *---------------------------------------------------------------------*

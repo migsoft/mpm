@@ -9,6 +9,7 @@ End.txt
 *.gcc
 *.bc
 *.log
+*.mpm
 /vOBJh
 /vOBJx
 /bOBJh
