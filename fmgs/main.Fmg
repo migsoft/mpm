@@ -98,7 +98,7 @@ DEFINE WINDOW TEMPLATE AT 0 , 0 WIDTH GetDeskTopWidth() HEIGHT GetDeskTopHeight(
         END TEXTBOX
 
         DEFINE TEXTBOX Text_5
-               ROW    190
+               ROW    230
                COL    170
                WIDTH  300
                HEIGHT 24
@@ -109,7 +109,7 @@ DEFINE WINDOW TEMPLATE AT 0 , 0 WIDTH GetDeskTopWidth() HEIGHT GetDeskTopHeight(
         END TEXTBOX
 
         DEFINE TEXTBOX Text_6
-               ROW    230
+               ROW    270
                COL    170
                WIDTH  300
                HEIGHT 24
@@ -121,7 +121,7 @@ DEFINE WINDOW TEMPLATE AT 0 , 0 WIDTH GetDeskTopWidth() HEIGHT GetDeskTopHeight(
         END TEXTBOX
 
         DEFINE TEXTBOX Text_7
-               ROW    270
+               ROW    310
                COL    170
                WIDTH  300
                HEIGHT 24
@@ -133,7 +133,7 @@ DEFINE WINDOW TEMPLATE AT 0 , 0 WIDTH GetDeskTopWidth() HEIGHT GetDeskTopHeight(
         END TEXTBOX
 
         DEFINE BUTTON Button_3
-               ROW    230
+               ROW    270
                COL    480
                WIDTH  30
                HEIGHT 28
@@ -142,7 +142,7 @@ DEFINE WINDOW TEMPLATE AT 0 , 0 WIDTH GetDeskTopWidth() HEIGHT GetDeskTopHeight(
         END BUTTON
 
         DEFINE BUTTON Button_4
-               ROW    270
+               ROW    310
                COL    480
                WIDTH  30
                HEIGHT 28
@@ -195,7 +195,7 @@ DEFINE WINDOW TEMPLATE AT 0 , 0 WIDTH GetDeskTopWidth() HEIGHT GetDeskTopHeight(
 
         DEFINE LABEL Label_64
                ROW    130
-               COL    180
+               COL    300
                WIDTH  100
                HEIGHT 24
                VALUE "64 Bits"
@@ -206,7 +206,7 @@ DEFINE WINDOW TEMPLATE AT 0 , 0 WIDTH GetDeskTopWidth() HEIGHT GetDeskTopHeight(
 
         DEFINE CHECKBOX Check_64
                ROW    125
-               COL    310
+               COL    435
                WIDTH  50
                HEIGHT 28
                CAPTION "Yes"
@@ -216,18 +216,18 @@ DEFINE WINDOW TEMPLATE AT 0 , 0 WIDTH GetDeskTopWidth() HEIGHT GetDeskTopHeight(
         END CHECKBOX
 
         DEFINE LABEL Label_bat
-               ROW    130
-               COL    315
+               ROW    170
+               COL    300
                WIDTH  100
                HEIGHT 24
-               VALUE "Del Batch"
+               VALUE "Delete Batch"
                FONTBOLD .T.
                TRANSPARENT .T.
                RIGHTALIGN .T.
         END LABEL
 
         DEFINE CHECKBOX Check_bat
-               ROW    125
+               ROW    165
                COL    435
                WIDTH  50
                HEIGHT 28
@@ -238,8 +238,29 @@ DEFINE WINDOW TEMPLATE AT 0 , 0 WIDTH GetDeskTopWidth() HEIGHT GetDeskTopHeight(
                ON CHANGE BorraTemporales()
         END CHECKBOX
 
+        DEFINE LABEL Label_MT
+               ROW    170
+               COL    15
+               WIDTH  122
+               HEIGHT 24
+               VALUE "MultiThread"
+               FONTBOLD .T.
+               TRANSPARENT .T.
+               RIGHTALIGN .T.
+        END LABEL
+
+        DEFINE CHECKBOX Check_MT
+               ROW    165
+               COL    170
+               WIDTH  50
+               HEIGHT 28
+               CAPTION "Yes"
+               FONTNAME 'Arial'
+               TOOLTIP 'MultiThread'
+        END CHECKBOX
+
         DEFINE LABEL Label_4
-               ROW    190
+               ROW    230
                COL    15
                WIDTH  122
                HEIGHT 24
@@ -251,7 +272,7 @@ DEFINE WINDOW TEMPLATE AT 0 , 0 WIDTH GetDeskTopWidth() HEIGHT GetDeskTopHeight(
 
 
         DEFINE LABEL Label_5
-               ROW    230
+               ROW    270
                COL    15
                WIDTH  122
                HEIGHT 20
@@ -262,7 +283,7 @@ DEFINE WINDOW TEMPLATE AT 0 , 0 WIDTH GetDeskTopWidth() HEIGHT GetDeskTopHeight(
         END LABEL
 
         DEFINE LABEL Label_6
-               ROW    270
+               ROW    310
                COL    15
                WIDTH  122
                HEIGHT 20
@@ -1617,7 +1638,7 @@ DEFINE WINDOW TEMPLATE AT 0 , 0 WIDTH GetDeskTopWidth() HEIGHT GetDeskTopHeight(
 
      DEFINE RADIOGROUP RadioGroup_3
             ROW    Main.Height - 200
-            COL    111
+            COL    110
             WIDTH  90
             OPTIONS {'GUI','Console','Mixed'}
             VALUE 1
@@ -1630,7 +1651,7 @@ DEFINE WINDOW TEMPLATE AT 0 , 0 WIDTH GetDeskTopWidth() HEIGHT GetDeskTopHeight(
 
      DEFINE RADIOGROUP RadioGroup_2
             ROW    Main.Height - 200
-            COL    211
+            COL    210
             WIDTH  90
             OPTIONS {'Normal','Debug'}
             VALUE 1
@@ -1643,7 +1664,7 @@ DEFINE WINDOW TEMPLATE AT 0 , 0 WIDTH GetDeskTopWidth() HEIGHT GetDeskTopHeight(
 
      DEFINE RADIOGROUP RadioGroup_7
             ROW    Main.Height - 200
-            COL    311
+            COL    310
             WIDTH  90
             OPTIONS {'Executable','Library'}
             VALUE 1
@@ -1654,9 +1675,23 @@ DEFINE WINDOW TEMPLATE AT 0 , 0 WIDTH GetDeskTopWidth() HEIGHT GetDeskTopHeight(
      oRad7 := GetControlObject("RadioGroup_7","main")
      oRad7:Anchor := "LEFTBOTTOM"
 
+     DEFINE RADIOGROUP RadioGroup_6
+            ROW    Main.Height - 200
+            COL    420
+            WIDTH  90
+            OPTIONS {'MinGW','Borland','Pelles','Visual C'}
+            VALUE 1
+            FONTNAME "Segoe UI"
+            ONCHANGE FocoEnText()
+            BACKCOLOR {255,255,255}
+     END RADIOGROUP
+
+     oRad6 := GetControlObject("RadioGroup_6","main")
+     oRad6:Anchor := "LEFTBOTTOM"
+
      DEFINE RADIOGROUP RadioGroup_5
             ROW    Main.Height - 200
-            COL    521
+            COL    520
             WIDTH  90
             OPTIONS {'Harbour','xHarbour'}
             VALUE 1
@@ -1668,19 +1703,19 @@ DEFINE WINDOW TEMPLATE AT 0 , 0 WIDTH GetDeskTopWidth() HEIGHT GetDeskTopHeight(
      oRad5 := GetControlObject("RadioGroup_5","main")
      oRad5:Anchor := "LEFTBOTTOM"
 
-     DEFINE RADIOGROUP RadioGroup_6
+     DEFINE RADIOGROUP RadioGroup_15
             ROW    Main.Height - 200
-            COL    421
+            COL    620
             WIDTH  90
-            OPTIONS {'MinGW','Borland','Pelles','Visual C'}
+            OPTIONS {'32 Bits','64 Bits'}
             VALUE 1
             FONTNAME "Segoe UI"
             ONCHANGE FocoEnText()
             BACKCOLOR {255,255,255}
      END RADIOGROUP
 
-     oRad6 := GetControlObject("RadioGroup_6","main")
-     oRad6:Anchor := "LEFTBOTTOM"
+     oRad15 := GetControlObject("RadioGroup_15","main")
+     oRad15:Anchor := "LEFTBOTTOM"
 
      DEFINE TIMER Timer_1 INTERVAL 500 ACTION StatusRefresh()
 

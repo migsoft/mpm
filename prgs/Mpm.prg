@@ -1442,6 +1442,26 @@ Function Hblibs( cRuta,cHb,cCclr )
       cRuta := cRuta + '\lib'
    Endif
 
+   If main.Check_MT.Value == .T.
+      cMT_xhb := 'vmmt.lib'
+      cMT_hb  := 'hbvmmt.lib'
+
+      cMT_xhba := 'libvmmt.a'
+      cMT_hba  := 'libhbvmmt.a'
+
+      cMT_xhba1 := 'lvmmt'
+      cMT_hba1  := 'lhbvmmt'
+   Else
+      cMT_xhb := 'vm.lib'
+      cMT_hb  := 'hbvm.lib'
+
+      cMT_xhba := 'libvm.a'
+      cMT_hba  := 'libhbvm.a'
+
+      cMT_xhba1 := 'lvm'
+      cMT_hba1  := 'lhbvm'
+   Endif
+
    If File(cRuta+'\vm.lib')
       aHb  := {'hbsix.lib', 'vm.lib'  , 'rdd.lib'  , 'macro.lib'  , 'pp.lib'  , 'rtl.lib'  , 'lang.lib'  , 'common.lib'  , 'nulsys.lib', 'dbfntx.lib', 'dbfcdx.lib', 'dbffpt.lib', 'ct.lib', 'libmisc.lib', 'hbodbc.lib', 'odbc32.lib', 'use_dll.lib', 'pcrepos.lib', 'codepage.lib', 'zlib.lib', 'tip.lib', 'rdds.lib' , 'rddads.lib', 'ace32.lib','debug.lib'}
    Else
