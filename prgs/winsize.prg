@@ -74,7 +74,7 @@ PROCEDURE MAIN3
 
       @ 90 ,370 BUTTON Boton16   CAPTION "GetTaskBarHeight" ;
         WIDTH 120 ACTION ;
-        MsgInfo(str(GetTaskBarHeight()))
+        MsgInfo(str(GetTaskBarHeight2()))
 
    END WINDOW
 
@@ -124,7 +124,7 @@ HB_FUNC( GET3DEDGEWIDTH )
    hb_retni( GetSystemMetrics(SM_CXEDGE) );
 }
 
-HB_FUNC( GETTASKBARHEIGHT )
+HB_FUNC( GETTASKBARHEIGHT2 )
 {
    RECT rect;
 

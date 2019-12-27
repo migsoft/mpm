@@ -68,16 +68,22 @@ Procedure Build2( ProjectName )  // Executable MinGW
 
         If ( file(MINGW32FOLDER+"\libexec\gcc\i686-w64-mingw32\6.1.0\collect2.exe") )
              cPathColl := "\libexec\gcc\i686-w64-mingw32\6.1.0"
+             cPathInc  := "\lib\gcc\i686-w64-mingw32\6.1.0\include"
         ElseIf ( file(MINGW32FOLDER+"\libexec\gcc\mingw32\3.4.5\collect2.exe") )
              cPathColl := "\libexec\gcc\mingw32\3.4.5"
+             cPathInc  := "\lib\gcc\mingw32\3.4.5\include"
         ElseIf ( file(MINGW32FOLDER+"\libexec\gcc\i686-w64-mingw32\5.3.0\collect2.exe") )
              cPathColl := "\libexec\gcc\i686-w64-mingw32\5.3.0"
+             cPathInc  := "\lib\gcc\i686-w64-mingw32\5.3.0\include"
         ElseIf ( file(MINGW32FOLDER+"\libexec\gcc\x86_64-w64-mingw32\6.1.0\collect2.exe") )
              cPathColl := "\libexec\gcc\x86_64-w64-mingw32\6.1.0"
+             cPathInc  := "\lib\gcc\x86_64-w64-mingw32\6.1.0\include"
         ElseIf ( file(MINGW32FOLDER+"\libexec\gcc\x86_64-w64-mingw32\7.1.0\collect2.exe") )
              cPathColl := "\libexec\gcc\x86_64-w64-mingw32\7.1.0"
+             cPathInc  := "\lib\gcc\x86_64-w64-mingw32\7.1.0\include"
         ElseIf ( file(MINGW32FOLDER+"\libexec\gcc\x86_64-w64-mingw32\8.1.0\collect2.exe") )
              cPathColl := "\libexec\gcc\x86_64-w64-mingw32\8.1.0"
+             cPathInc  := "\lib\gcc\x86_64-w64-mingw32\8.1.0\include"
         Endif
 
         Out := Out + 'PATH = '+MINGW32FOLDER+'\BIN;'+ MINGW32FOLDER+cPathColl+';' + PROJECTFOLDER + NewLi
@@ -185,7 +191,11 @@ Procedure Build2( ProjectName )  // Executable MinGW
         Endif
 
         If HBCHOICE == 2
-            cRutaLibs :=' -L$(MINIGUI_INSTALL)/lib -L$(MINIGUI_INSTALL)/lib/xhb/mingw '
+           If ( main.check_64.value == .F. )
+              cRutaLibs :=' -L$(MINIGUI_INSTALL)/lib -L$(MINIGUI_INSTALL)/lib/xhb/mingw -L$(HRB_DIR)'+c_dirlib_hb
+           Else
+              cRutaLibs :=' -L$(MINIGUI_INSTALL)/lib/xhb/mingw64 -L$(HRB_DIR)'+c_dirlib_hb
+           Endif
         Endif
 
         Out := Out +'-L$(MINGW)/lib '+cLibFolder+cRutaLibs+' -L. -Wl,--start-group '
@@ -241,11 +251,11 @@ Procedure Build2( ProjectName )  // Executable MinGW
             If upper(Right( PRGFILES [i] , 3 )) = 'PRG'
                 cfile := Left ( PRGFILES [i] , Len(PRGFILES [i] ) - 4 )
                 Out := Out +'$(OBJ_DIR)/'+GetName(cfile)+'.o    : $(OBJ_DIR)/'+GetName(cfile)+'.c'+NewLi
-                Out := Out +'	gcc $(CFLAGS)  -I$(INC_DIR) -I$(HRB_DIR)/include -I$(MINGW)/include -I$(MINGW)/LIB/GCC/MINGW32/3.4.5/include -I. -c $(OBJ_DIR)/'+GetName(cfile)+'.c -o $(OBJ_DIR)/'+GetName(cfile)+'.o'+NewLi
+                Out := Out +'	gcc $(CFLAGS)  -I$(INC_DIR) -I$(HRB_DIR)/include -I$(MINGW)/include -I$(MINGW)'+cPathInc+' -I. -c $(OBJ_DIR)/'+GetName(cfile)+'.c -o $(OBJ_DIR)/'+GetName(cfile)+'.o'+NewLi
             ElseIF upper(Right( PRGFILES [i] , 1 )) = 'C'
                 cfile := Left ( PRGFILES [i] , Len(PRGFILES [i] ) - 2 )
                 Out := Out +'$(OBJ_DIR)/'+GetName(cfile)+'.o    : '+cfile+'.c'+NewLi
-                Out := Out +'	gcc $(CFLAGS)  -I$(INC_DIR) -I$(HRB_DIR)/include -I$(MINGW)/include -I$(MINGW)/LIB/GCC/MINGW32/3.4.5/include -I. -c '+cfile+'.c -o $(OBJ_DIR)/'+GetName(cfile)+'.o'+NewLi
+                Out := Out +'	gcc $(CFLAGS)  -I$(INC_DIR) -I$(HRB_DIR)/include -I$(MINGW)/include -I$(MINGW)'+cPathInc+' -I. -c '+cfile+'.c -o $(OBJ_DIR)/'+GetName(cfile)+'.o'+NewLi
             Endif
         next i
 
