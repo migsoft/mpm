@@ -97,17 +97,14 @@ Procedure MsgBuild()
       PonerEspera('Compiling...')
 
       For i := 1 To main.List_1.ItemCount
-          DO EVENTS
           aadd ( PRGFILES , Alltrim(main.List_1.Item(i)) )
       Next i
 
       For i := 1 To main.List_1.ItemCount
-          DO EVENTS
           aadd ( CFILES , Alltrim(main.List_1.Item(i)) )
       Next i
 
       For i := 1 To main.List_2.ItemCount
-          DO EVENTS
           aadd ( LIBFILES , Alltrim(main.List_2.Item(i)) )
       Next i
 

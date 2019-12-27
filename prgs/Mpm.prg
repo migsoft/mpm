@@ -304,7 +304,7 @@ Procedure SetTop
 Return
 
 *---------------------------------------------------------------------*
-Procedure OpenMPM2( ProjectFile ) // VersiÃ³n antigÃ¼a de .mpm
+Procedure OpenMPM2( ProjectFile ) // Versión antigüa de .mpm
 *---------------------------------------------------------------------*
 
    Local ConfigFile , ConfigFileName , i , Line

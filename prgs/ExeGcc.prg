@@ -66,7 +66,21 @@ Procedure Build2( ProjectName )  // Executable MinGW
         cIncFolder := MINIGUIFOLDER + '\INCLUDE' + ' -I'+HARBOURFOLDER + '\INCLUDE' + IIF( Empty( INCFOLDER ),"",' -I'+ INCFOLDER )
         cLibFolder := IIF( Empty( LIBFOLDER ),"",' -L'+ LIBFOLDER )
 
-        Out := Out + 'PATH = '+MINGW32FOLDER+'\BIN;'+MINGW32FOLDER+'\LIBEXEC\GCC\MINGW32\3.4.5'+';'+PROJECTFOLDER + NewLi
+        If ( file(MINGW32FOLDER+"\libexec\gcc\i686-w64-mingw32\6.1.0\collect2.exe") )
+             cPathColl := "\libexec\gcc\i686-w64-mingw32\6.1.0"
+        ElseIf ( file(MINGW32FOLDER+"\libexec\gcc\mingw32\3.4.5\collect2.exe") )
+             cPathColl := "\libexec\gcc\mingw32\3.4.5"
+        ElseIf ( file(MINGW32FOLDER+"\libexec\gcc\i686-w64-mingw32\5.3.0\collect2.exe") )
+             cPathColl := "\libexec\gcc\i686-w64-mingw32\5.3.0"
+        ElseIf ( file(MINGW32FOLDER+"\libexec\gcc\x86_64-w64-mingw32\6.1.0\collect2.exe") )
+             cPathColl := "\libexec\gcc\x86_64-w64-mingw32\6.1.0"
+        ElseIf ( file(MINGW32FOLDER+"\libexec\gcc\x86_64-w64-mingw32\7.1.0\collect2.exe") )
+             cPathColl := "\libexec\gcc\x86_64-w64-mingw32\7.1.0"
+        ElseIf ( file(MINGW32FOLDER+"\libexec\gcc\x86_64-w64-mingw32\8.1.0\collect2.exe") )
+             cPathColl := "\libexec\gcc\x86_64-w64-mingw32\8.1.0"
+        Endif
+
+        Out := Out + 'PATH = '+MINGW32FOLDER+'\BIN;'+ MINGW32FOLDER+cPathColl+';' + PROJECTFOLDER + NewLi
         Out := Out + 'MINGW = '+MINGW32FOLDER + NewLi
         Out := Out + 'HRB_DIR = '+HARBOURFOLDER + NewLi
         Out := Out + 'MINIGUI_INSTALL = '+MINIGUIFOLDER + NewLi
@@ -78,19 +92,18 @@ Procedure Build2( ProjectName )  // Executable MinGW
         If WITHGTMODE = 2
            // Out := Out + 'CFLAGS = -Wall -mno-cygwin -O3' +NewLi
             Out := Out + 'CFLAGS = -Wall -O3' +NewLi
-
         Else
             // Out := Out + 'CFLAGS = -Wall -mwindows -mno-cygwin -O3 -Wl,--allow-multiple-definition '+USERCFLAGS+NewLi
             // Out := Out + 'CFLAGS = -Wall -mwindows -O3 -Wl,--allow-multiple-definition '+USERCFLAGS+NewLi
             // Out := Out + 'CFLAGS = -Wall -mwindows -mno-cygwin -O3 ' +NewLi
-
             If WATHGUI = 3
                 HMGFLAGS := ' -pthread -static -lpthread '
-                Out := Out + 'CFLAGS = -Wall -mwindows -O3 -Wl,--allow-multiple-definition '+HMGFLAGS+USERCFLAGS+NewLi
+                Out := Out + 'CFLAGS = -Wall -mwindows -O3 '+HMGFLAGS+USERCFLAGS+NewLi
+                //Out := Out + 'CFLAGS = -Wall -mwindows -O3 -Wl,--allow-multiple-definition '+HMGFLAGS+USERCFLAGS+NewLi
             Else
-                Out := Out + 'CFLAGS = -Wall -mwindows -O3 -Wl,--allow-multiple-definition '+USERCFLAGS+NewLi
+                Out := Out + 'CFLAGS = -Wall -mwindows '+USERCFLAGS+NewLi
+                //Out := Out + 'CFLAGS = -Wall -mwindows -O3 -Wl,--allow-multiple-definition '+USERCFLAGS+NewLi
             Endif
-
         Endif
 
         Out := Out + NewLi
