@@ -234,10 +234,19 @@ Procedure Build5(ProjectName) //(x)Harbour - Visual C
 
     MakeName := 'nmake.exe'
     ParamString := '/F ' + PROJECTFOLDER + If ( Right ( PROJECTFOLDER , 1 ) != '\' , '\' , '' ) +  '_Temp.bc' + ' 1>' + PROJECTFOLDER + If ( Right ( PROJECTFOLDER , 1 ) != '\' , '\' , '' ) +  '_Temp.Log 2>&1'
-
+/*
     Hb_Memowrit ( PROJECTFOLDER + If ( Right ( PROJECTFOLDER , 1 ) != '\' , '\' , '' ) + '_Build.Bat' , ;
                   '@ECHO OFF' + NewLi + 'call '+AddQuote( BCCFOLDER +'\vcvarsall.bat')+' x86' + NewLi + ;
                        MakeName + ' ' + ParamString + NewLi + 'Echo End > ' + PROJECTFOLDER + If ( Right ( PROJECTFOLDER , 1 ) != '\' , '\' , '' ) + 'End.Txt' + NewLi )
+*/
+    Hb_Memowrit ( PROJECTFOLDER + If ( Right ( PROJECTFOLDER , 1 ) != '\' , '\' , '' ) + '_Build.Bat' , ;
+                  '@ECHO OFF' + NewLi + ;
+                  'set path='+AddQuote( BCCFOLDER +'\bin;%path%') + NewLi + ;
+                  'set lib='+AddQuote( BCCFOLDER +'\lib;%lib%') + NewLi + ;
+                  'set include='+AddQuote( BCCFOLDER +'\include;%include%') + NewLi + ;
+                   NewLi + ;
+                   MakeName + ' ' + ParamString + NewLi +;
+                  'Echo End > ' + PROJECTFOLDER + If ( Right ( PROJECTFOLDER , 1 ) != '\' , '\' , '' ) + 'End.Txt' + NewLi )
 
       Procesando(1)
 
