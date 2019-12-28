@@ -65,6 +65,8 @@ Procedure Build2( ProjectName )  // Executable MinGW
         cUserFlags := iif( empty(USERFLAGS),'',' '+USERFLAGS )
         cIncFolder := MINIGUIFOLDER + '\INCLUDE' + ' -I'+HARBOURFOLDER + '\INCLUDE' + IIF( Empty( INCFOLDER ),"",' -I'+ INCFOLDER )
         cLibFolder := IIF( Empty( LIBFOLDER ),"",' -L'+ LIBFOLDER )
+        cPathColl := "\bin"
+        cPathInc  := "\include"
 
         If ( file(MINGW32FOLDER+"\libexec\gcc\i686-w64-mingw32\6.1.0\collect2.exe") )
              cPathColl := "\libexec\gcc\i686-w64-mingw32\6.1.0"
@@ -107,7 +109,8 @@ Procedure Build2( ProjectName )  // Executable MinGW
                 Out := Out + 'CFLAGS = -Wall -mwindows -O3 '+HMGFLAGS+USERCFLAGS+NewLi
                 //Out := Out + 'CFLAGS = -Wall -mwindows -O3 -Wl,--allow-multiple-definition '+HMGFLAGS+USERCFLAGS+NewLi
             Else
-                Out := Out + 'CFLAGS = -Wall -mwindows '+USERCFLAGS+NewLi
+                HMGFLAGS := ' -pthread -static -lpthread '
+                Out := Out + 'CFLAGS = -Wall -mwindows '+HMGFLAGS+USERCFLAGS+NewLi
                 //Out := Out + 'CFLAGS = -Wall -mwindows -O3 -Wl,--allow-multiple-definition '+USERCFLAGS+NewLi
             Endif
         Endif
