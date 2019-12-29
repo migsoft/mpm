@@ -1059,6 +1059,7 @@ Procedure SaveProject()  // Guarda variables en carpeta de mpm
          SET SECTION 'PROJECT'    ENTRY "EXECOMPRESS"     TO main.check_1.value
          SET SECTION 'PROJECT'    ENTRY "EXE64BITS"       TO main.check_64.value
          SET SECTION 'PROJECT'    ENTRY "DELETEBATCH"     TO main.check_bat.value
+         SET SECTION 'PROJECT'    ENTRY "MULTITHREAD"     TO main.check_MT.value
 
          SET SECTION 'PROJECT'    ENTRY "OBJFOLDER"       TO ChgPathToRelative(main.text_5.value)
          SET SECTION 'PROJECT'    ENTRY "LIBFOLDER"       TO ChgPathToRelative(main.text_6.value)
@@ -1081,6 +1082,7 @@ Procedure SaveProject()  // Guarda variables en carpeta de mpm
 
          SET SECTION 'COMPILER'   ENTRY "HBCHOICE"        TO main.RadioGroup_5.value
          SET SECTION 'COMPILER'   ENTRY "CCOMPILER"       TO main.RadioGroup_6.value
+         SET SECTION 'COMPILER'   ENTRY "BITSCCOMP"       TO main.RadioGroup_15.value
 
          SET SECTION 'FILETYPE'   ENTRY "OUTPUTFILE"      TO main.RadioGroup_7.value
          SET SECTION 'INTERFASE'  ENTRY "WITHGTMODE"      TO main.RadioGroup_3.value
@@ -1637,7 +1639,7 @@ Procedure Crea_temp_rc( cFilerc )  // File _temp.rc
                        cRes := "hmg.rc" 
                     Else                     
                        cRes := "hmg32.rc"
-                    Endif   
+                    Endif
                  Endif
                  DosComm1 := '/c copy /b "'+MINIGUIFOLDER+'\resources\'+cRes+'"+"'+cFilerc2+'.rc'+'"+"'+MINIGUIFOLDER+'\resources\filler"'+' "'+MINIGUIFOLDER+'\resources\_temp.rc"'+' >NUL'
             CASE WATHGUI == 4  // FWH
