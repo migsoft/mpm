@@ -1,7 +1,3 @@
-/*
- * $Id: Readme.txt
- */
-
 (c)2011-2018 MigSoft Project Manager based upon
 2003(c) MPM (MiniGUI Project Manager) by Roberto Lopez
 
@@ -32,6 +28,9 @@ linked only the libraries that exist in the specified directory
 MPM used this tools for build ".exe"
 
 MinGW  =>  mingw32-make.exe
+
 Borland  => make.exe
+
 MSVC => nmake.exe
+
 Pelles => pomake.exe
