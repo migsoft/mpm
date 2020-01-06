@@ -179,6 +179,7 @@ Procedure Build5(ProjectName) //(x)Harbour - Visual C
 
     Out += '	echo $(CC_LIB_DIR)\user32.lib >> b32.bc' + NewLi
     Out += '	echo $(CC_LIB_DIR)\ws2_32.lib >> b32.bc' + NewLi
+    Out += '	echo $(CC_LIB_DIR)\Vfw32.lib >> b32.bc' + NewLi
     Out += '	echo $(CC_LIB_DIR)\winspool.lib >> b32.bc' + NewLi
     Out += '	echo $(CC_LIB_DIR)\ole32.lib >> b32.bc' + NewLi
     Out += '	echo $(CC_LIB_DIR)\oleaut32.lib >> b32.bc' + NewLi
