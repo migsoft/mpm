@@ -210,8 +210,8 @@ Procedure Build2( ProjectName )  // Executable MinGW
         cMGELibs2  :=' -ltsbrowse -lcalldll -ladordd -lmsvfw32'
 
         cOohgLibs1 :=' -looHG -lhbprinter -lminiprint '+cLibsUser
-
-        cMinGWLibs :=' -luser32 -lwinspool -lcomctl32 -lcomdlg32 -lgdi32 -lole32 -loleaut32 -luuid -lwinmm -lvfw32 -lwsock32 -lmsimg32 -lws2_32 '
+                                                                                                                                                                   
+        cMinGWLibs :=' -luser32 -lwinspool -lcomctl32 -lcomdlg32 -lgdi32 -lole32 -loleaut32 -luuid -lwinmm -lvfw32 -lwsock32 -lmsimg32 -lws2_32 -lmpr -lmapi32 -liphlpapi '
 
         If HBCHOICE = 1
             cHbLibs1   := HbLibs(HARBOURFOLDER,1,1)

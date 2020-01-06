@@ -168,6 +168,9 @@ Procedure Build4(ProjectName) //(x)Harbour - Pelles C
           Out += '	echo ' + Left ( LIBFILES [i] , Len(LIBFILES [i] ) - 4 ) + '.lib >> b32.bc' + NewLi
       Next i
 
+    Out += '	echo ws2_32.lib >> b32.bc' + NewLi
+    Out += '	echo mapi32.lib >> b32.bc' + NewLi
+    Out += '	echo iphlpapi.lib >> b32.bc' + NewLi
 
     Out += '	echo crt.lib >> b32.bc' + NewLi
     Out += '	echo kernel32.lib >> b32.bc' + NewLi

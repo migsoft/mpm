@@ -200,6 +200,9 @@ Procedure Build5(ProjectName) //(x)Harbour - Visual C
     Out += '	echo $(CC_LIB_DIR)\libucrt.lib >> b32.bc' + NewLi
     Out += '	echo $(CC_LIB_DIR)\wsock32.lib >> b32.bc' + NewLi
 
+    Out += '	echo $(CC_LIB_DIR)\mapi32.lib >> b32.bc' + NewLi
+    Out += '	echo $(CC_LIB_DIR)\iphlpapi.lib >> b32.bc' + NewLi
+
     If WATHGUI = 4
        Out += '	echo _temp.res >> b32.bc' + NewLi
     Else
