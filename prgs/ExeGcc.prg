@@ -265,7 +265,7 @@ Procedure Build2( ProjectName )  // Executable MinGW
         Out := Out + NewLi
 
         Out := Out +'$(MINIGUI_INSTALL)/resources/_temp.o    : $(MINIGUI_INSTALL)/resources/'+'_temp.rc'+NewLi
-        Out := Out +'	$(MINGW)/bin/windres.exe -i $^ -o$@' +NewLi
+        Out := Out +'	$(MINGW)/bin/windres.exe -i $(INC_DIR) $^ -o$@' +NewLi
 
         Out := Out + NewLi
 

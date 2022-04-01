@@ -6,7 +6,7 @@
  */
 
 /*
- * INDENT.EXE (v.11.0531) Modified by 2019 MigSoft <migsoft/at/oohg.org>
+ * INDENT.EXE (v.11.0531) Modified by MigSoft <migsoft/at/oohg.org>
  *
  */
 
