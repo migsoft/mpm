@@ -3,6 +3,8 @@ compres.bat
 xhbcc.bat
 resul.txt
 End.txt
+mpm.mpm
+_Build.bat
 *.exe
 *.ini
 *.bat
@@ -64,4 +66,3 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
-mpm.mpm
