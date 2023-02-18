@@ -1,12 +1,12 @@
 /*
  * $Id: MpmCommon.prg
  */
- 
+
 /*
  * ooHG - Object Oriented Harbour GUI library
  * https://oohg.github.io/ - https://alturademiras.com
  * "Mpm.prg" MigSoft Project Manager - Miguel Angel Juárez Apaza
- * Copyright 2008-2018 MigSoft <migsoft/at/oohg.org> 
+ * Copyright 2008-2018 MigSoft <migsoft/at/oohg.org>
  */
 
  */
@@ -202,6 +202,7 @@ FUNCTION DelExt(cFileName)
   LOCAL cBase  := IF(nDot <= nSlash .OR. nDot == nSlash + 1, ;
                   cTrim, LEFT(cTrim, nDot - 1))
 RETURN( cBase )
+/*
 *---------------------------------------------------------------------*
 Function cFilePath( cPathMask )
 *---------------------------------------------------------------------*
@@ -209,6 +210,7 @@ Function cFilePath( cPathMask )
 
 Return If( n > 0, Upper( Left( cPathMask, n ) ),;
        ( cDisk := cFileDisc( cPathMask ) ) + If( ! Empty( cDisk ), "\", "" ) )
+*/
 *---------------------------------------------------------------------*
 Function cFileDisc( cPathMask )
 *---------------------------------------------------------------------*
